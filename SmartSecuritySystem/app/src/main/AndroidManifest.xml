@@ -16,6 +16,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".FamilyAccountsActivity"
+            android:label="@string/family_accounts"/>
+        <activity android:name=".GuestAccountsActivity"
+            android:label="@string/guest_accounts"/>
+        <activity android:name=".CameraFeedActivity"
+            android:label="@string/camera_feed"/>
+        <activity android:name=".UserLogsActivity"
+            android:label="@string/user_logs"></activity>
     </application>
 
 </manifest>
