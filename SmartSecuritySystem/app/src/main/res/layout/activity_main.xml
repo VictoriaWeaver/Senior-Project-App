@@ -13,47 +13,57 @@
         android:layout_height="56dp"
         android:background="?attr/colorPrimary"
         android:elevation="4dp"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Dark"
         tools:layout_editor_absoluteY="0dp"
         tools:layout_editor_absoluteX="8dp" />
 
-    <LinearLayout
+    <GridLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:padding="16dp"
+        android:columnCount="3"
+        android:alignmentMode="alignMargins"
         android:layout_gravity="center"
         tools:layout_editor_absoluteY="0dp"
         tools:layout_editor_absoluteX="8dp">
 
         <Button
             android:id="@+id/family_accounts_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/main_btn_dim"
+            android:layout_height="@dimen/main_btn_dim"
             android:layout_gravity="center"
+            android:drawableTop="@mipmap/ic_group_black_48dp"
+            android:background="@android:color/transparent"
             android:text="@string/family_accounts"/>
 
         <Button
             android:id="@+id/guest_accounts_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/main_btn_dim"
+            android:layout_height="@dimen/main_btn_dim"
             android:layout_gravity="center"
+            android:drawableTop="@mipmap/ic_public_black_48dp"
+            android:background="@android:color/transparent"
             android:text="@string/guest_accounts"/>
 
         <Button
             android:id="@+id/camera_feed_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/main_btn_dim"
+            android:layout_height="@dimen/main_btn_dim"
             android:layout_gravity="center"
+            android:drawableTop="@mipmap/ic_camera_black_48dp"
+            android:background="@android:color/transparent"
             android:text="@string/camera_feed"/>
 
         <Button
             android:id="@+id/user_logs_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/main_btn_dim"
+            android:layout_height="@dimen/main_btn_dim"
             android:layout_gravity="center"
+            android:drawableTop="@mipmap/ic_history_black_48dp"
+            android:background="@android:color/transparent"
             android:text="@string/user_logs"/>
 
-    </LinearLayout>
+    </GridLayout>
 
 </LinearLayout>

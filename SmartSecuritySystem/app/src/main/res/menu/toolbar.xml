@@ -5,7 +5,7 @@
     <!-- "Mark Favorite", should appear as action button if possible -->
     <item
         android:id="@+id/action_favorite"
-        android:icon="@drawable/ic_favorite_black_48dp"
+        android:icon="@mipmap/ic_favorite_black_48dp"
         android:title="action favorite"
         app:showAsAction="never"/>
 
