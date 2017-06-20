@@ -8,8 +8,32 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="myTheme" parent="Theme.AppCompat.Light">
-        <item name="android:actionMenuTextColor">@android:color/white</item>
+    <style name="AppThemeFamily" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/familyPrimary</item>
+        <item name="colorPrimaryDark">@color/familyPrimaryDark</item>
+        <item name="colorAccent">@color/familyPrimaryLight</item>
+    </style>
+
+    <style name="AppThemeGuest" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/guestPrimary</item>
+        <item name="colorPrimaryDark">@color/guestPrimaryDark</item>
+        <item name="colorAccent">@color/guestPrimaryLight</item>
+    </style>
+
+    <style name="AppThemeCamera" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/cameraPrimary</item>
+        <item name="colorPrimaryDark">@color/cameraPrimaryDark</item>
+        <item name="colorAccent">@color/cameraPrimaryLight</item>
+    </style>
+
+    <style name="AppThemeLogs" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/logsPrimary</item>
+        <item name="colorPrimaryDark">@color/logsPrimaryDark</item>
+        <item name="colorAccent">@color/logsPrimaryLight</item>
     </style>
 
 </resources>
