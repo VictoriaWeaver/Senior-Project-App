@@ -9,13 +9,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button familyAccountsBtn;
-    private Button guestAccountsBtn;
-    private Button cameraFeedBtn;
-    private Button userLogsBtn;
+    private ImageButton familyAccountsBtn;
+    private ImageButton guestAccountsBtn;
+    private ImageButton cameraFeedBtn;
+    private ImageButton userLogsBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,37 +25,6 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
-
-        familyAccountsBtn = (Button) findViewById(R.id.family_accounts_btn);
-        familyAccountsBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, FamilyAccountsActivity.class));
-            }
-        });
-        guestAccountsBtn = (Button) findViewById(R.id.guest_accounts_btn);
-        guestAccountsBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, GuestAccountsActivity.class));
-            }
-        });
-
-        cameraFeedBtn = (Button) findViewById(R.id.camera_feed_btn);
-        cameraFeedBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, CameraFeedActivity.class));
-            }
-        });
-
-        userLogsBtn = (Button) findViewById(R.id.user_logs_btn);
-        userLogsBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, UserLogsActivity.class));
-            }
-        });
 
     }
 

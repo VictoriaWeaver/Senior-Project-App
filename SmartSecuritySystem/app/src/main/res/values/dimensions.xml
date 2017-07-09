@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--Main Activity-->
-    <dimen name="main_btn_dim">100dp</dimen>
+    <dimen name="main_btn_height">36dp</dimen>
+    <dimen name="main_btn_width">150dp</dimen>
 </resources>
