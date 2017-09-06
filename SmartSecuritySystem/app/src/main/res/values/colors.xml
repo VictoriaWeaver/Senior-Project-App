@@ -17,6 +17,11 @@
     <color name="guestPrimaryDark">#7200ca</color>
     <color name="guestPrimaryLight">#e254ff</color>
 
+    <!--Control-->
+    <color name="controlPrimary">#00838f</color>
+    <color name="controlPrimaryDark">#005662</color>
+    <color name="controlPrimaryLight">#4fb3bf</color>
+
     <!--Camera-->
     <color name="cameraPrimary">#43A047</color>
     <color name="cameraPrimaryDark">#1B5E20</color>

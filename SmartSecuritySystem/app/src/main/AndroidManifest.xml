@@ -27,6 +27,10 @@
             android:label="@string/guest_accounts"
             android:theme="@style/AppThemeGuest" />
         <activity
+            android:name=".ControlActivity"
+            android:label="@string/control"
+            android:theme="@style/AppThemeControl" />
+        <activity
             android:name=".CameraFeedActivity"
             android:label="@string/camera_feed"
             android:theme="@style/AppThemeCamera" />

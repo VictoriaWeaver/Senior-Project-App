@@ -8,6 +8,7 @@
     <!--Main Activity-->
     <string name="family_accounts">Family Accounts</string>
     <string name="guest_accounts">Guest Accounts</string>
+    <string name="control">System Controls</string>
     <string name="camera_feed">Camera Feed</string>
     <string name="user_logs">User Access Logs</string>
     <string name="title_activity_login">Sign in</string>
