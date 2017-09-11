@@ -8,8 +8,8 @@ public class User {
 
     private int _id;
     private String _name;
-    private boolean _family;
     private boolean _admin;
+    private boolean _family;
 
     public User(int id, String name, boolean family, boolean admin) {
         this._id = id;
