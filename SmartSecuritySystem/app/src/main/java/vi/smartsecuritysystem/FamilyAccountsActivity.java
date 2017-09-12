@@ -3,8 +3,11 @@ package vi.smartsecuritysystem;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import java.util.List;
 
 public class FamilyAccountsActivity extends AppCompatActivity {
 
@@ -15,7 +18,37 @@ public class FamilyAccountsActivity extends AppCompatActivity {
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
+
+        DBHelper db = new DBHelper(this);
+
+        dbTestOps(db);
+
     }
+
+
+    private void dbTestOps(DBHelper db) {
+        /**
+         * CRUD Operations
+         * */
+        // Inserting users
+        User u = new User("Victoria", true, true);
+        db.addUser(u);
+//        db.addUser(new User("Prathibha", false, true));
+//        db.addUser(new User("Ram", false, true));
+//        db.addUser(new User("Kevin", false, false));
+
+        //Reading users
+//        List<User> users = db.getAllUsers();
+//
+//        for (User un : users) {
+//            String log = "Id: " + un.getID() + " ,Name: " + un.getName() + " ,Admin: "
+//                    + un.isAdmin() + " ,Family: " + un.isFamily() + "\n";
+//
+//            System.out.print(log);
+//        }
+
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
