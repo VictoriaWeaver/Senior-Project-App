@@ -2,10 +2,12 @@ package vi.smartsecuritysystem;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -48,8 +50,6 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
 
-
-
     // Adding new user
     public void addUser(User user) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -65,18 +65,82 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     // Getting single user
-    public User getUser(int id) {}
+    public User getUser(int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(TABLE_USERS, new String[]{KEY_ID, KEY_NAME, KEY_ADMIN,
+                KEY_FAMILY}, KEY_ID + "=?", new String[]{String.valueOf(id)}, null, null, null, null);
+
+        if (cursor != null)
+            cursor.moveToFirst();
+
+        boolean admin = (cursor.getInt(2) != 0);
+        boolean family = (cursor.getInt(3) != 0);
+
+        User user = new User(Integer.parseInt(cursor.getString(0)),
+                cursor.getString(1), admin, family);
+        // return user
+        return user;
+    }
 
     // Getting All Users
-    public List<User> getAllUsers() {}
+    public List<User> getAllUsers() {
+        List<User> userList = new ArrayList<User>();
+        // Select All Query
+        String selectQuery = "SELECT  * FROM " + TABLE_USERS;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                User user = new User();
+                user.setID(Integer.parseInt(cursor.getString(0)));
+                user.setName(cursor.getString(1));
+                user.setAdmin(Integer.parseInt(cursor.getString(2)) != 0);
+                user.setFamily(Integer.parseInt(cursor.getString(3)) != 0);
+                // Adding contact to list
+                userList.add(user);
+            } while (cursor.moveToNext());
+        }
+
+        // return contact list
+        return userList;
+    }
 
     // Getting users Count
-    public int getContactsCount() {}
+    public int getUsersCount() {
+        String countQuery = "SELECT  * FROM " + TABLE_USERS;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(countQuery, null);
+        cursor.close();
+
+        // return count
+        return cursor.getCount();
+    }
+
     // Updating single user
-    public int updateUser(User user) {}
+    public int updateUser(User user) {
+        // Updating single user
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_NAME, user.getName());
+        values.put(KEY_ADMIN, user.isAdmin());
+        values.put(KEY_FAMILY, user.isFamily());
+
+        // updating row
+        return db.update(TABLE_USERS, values, KEY_ID + " = ?",
+                new String[]{String.valueOf(user.getID())});
+    }
 
     // Deleting single user
-    public void deleteUser(User user) {}
+    public void deleteUser(User user) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_USERS, KEY_ID + " = ?",
+                new String[] { String.valueOf(user.getID()) });
+        db.close();
+    }
 
 
 }

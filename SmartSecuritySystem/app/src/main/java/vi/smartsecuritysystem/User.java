@@ -11,8 +11,18 @@ public class User {
     private boolean _admin;
     private boolean _family;
 
+    public User(){
+
+    }
+
     public User(int id, String name, boolean family, boolean admin) {
         this._id = id;
+        this._name = name;
+        this._admin = admin;
+        this._family = family;
+    }
+
+    public User(String name, boolean family, boolean admin) {
         this._name = name;
         this._admin = admin;
         this._family = family;
