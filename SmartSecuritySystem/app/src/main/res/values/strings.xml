@@ -12,6 +12,8 @@
     <string name="camera_feed">Camera Feed</string>
     <string name="user_logs">User Access Logs</string>
     <string name="title_activity_login">Sign in</string>
+    <string name="add_user">Add User</string>
+    <string name="edit_user">Edit User</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>

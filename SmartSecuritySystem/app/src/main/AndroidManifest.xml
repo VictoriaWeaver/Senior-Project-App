@@ -14,10 +14,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity
             android:name=".MainActivity"
             android:theme="@style/AppTheme" />
-        </activity>
         <activity
             android:name=".FamilyAccountsActivity"
             android:label="@string/family_accounts"
@@ -47,6 +46,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".AddEditUserActivity"
+            android:label="@string/add_user"
+            android:theme="@style/AppThemeFamily" />
     </application>
 
 </manifest>

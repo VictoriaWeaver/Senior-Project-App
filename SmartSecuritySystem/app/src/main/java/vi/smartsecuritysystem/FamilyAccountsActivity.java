@@ -1,5 +1,7 @@
 package vi.smartsecuritysystem;
 
+import android.content.Intent;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -7,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -14,6 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FamilyAccountsActivity extends AppCompatActivity {
+
+    private FloatingActionButton addUser;
 
     private RecyclerView userRecyclerView;
     private RecyclerView.Adapter userAdapter;
@@ -26,6 +31,13 @@ public class FamilyAccountsActivity extends AppCompatActivity {
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
+
+        addUser = (FloatingActionButton) findViewById(R.id.add_user_btn);
+        addUser.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                startActivity(new Intent(FamilyAccountsActivity.this, AddEditUserActivity.class));
+            }
+        });
 
         userRecyclerView = (RecyclerView) findViewById(R.id.family_accounts_list);
         displayUsers(userRecyclerView);
