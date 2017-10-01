@@ -19,7 +19,6 @@ import java.util.List;
 public class FamilyAccountsActivity extends AppCompatActivity {
 
     private FloatingActionButton addUser;
-
     private RecyclerView userRecyclerView;
     private RecyclerView.Adapter userAdapter;
     private RecyclerView.LayoutManager userLayoutManager;
@@ -44,7 +43,7 @@ public class FamilyAccountsActivity extends AppCompatActivity {
     }
 
 
-    private void displayUsers(RecyclerView userRecyclerView){
+    private void displayUsers(RecyclerView userRecyclerView) {
 
         // Temporary list in while DB is in development
         List<String> usernames = new ArrayList<String>();
