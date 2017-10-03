@@ -1,15 +1,27 @@
 package vi.smartsecuritysystem;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import android.net.Uri;
+import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -27,8 +39,9 @@ import android.widget.Toast;
 
 public class AddEditUserActivity extends AppCompatActivity {
 
-    private static int RESULT_LOAD_IMAGE = 1;
-    private Button profileBtn;
+    private static final int PICK_FROM_GALLERY = 1;
+
+    private Button choosePhotoBtn;
     private ImageView profileImage;
     private String imgDecodableString;
     private Button doneBtn;
@@ -49,7 +62,7 @@ public class AddEditUserActivity extends AppCompatActivity {
         setSupportActionBar(myToolbar);
 
         profileImage = (ImageView) findViewById(R.id.profile_image);
-        profileBtn = (Button) findViewById(R.id.profile_image_btn);
+        choosePhotoBtn = (Button) findViewById(R.id.choose_photo_btn);
         nameEdit = (EditText) findViewById(R.id.user_name);
         adminSwitch = (Switch) findViewById(R.id.admin_btn);
         familySwitch = (Switch) findViewById(R.id.family_btn);
@@ -59,9 +72,9 @@ public class AddEditUserActivity extends AppCompatActivity {
 
         //set GuestFlag based on previous activity
         familySwitch.setChecked(!guestFlag);
-        if(guestFlag){
+        if (guestFlag) {
             guestView.setVisibility(View.VISIBLE);
-        } else{
+        } else {
             guestView.setVisibility(View.INVISIBLE);
         }
 
@@ -69,13 +82,37 @@ public class AddEditUserActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case PICK_FROM_GALLERY:
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Intent galleryIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    startActivityForResult(galleryIntent, PICK_FROM_GALLERY);
+                } else {
+
+                }
+                break;
+        }
+    }
+
 
     private void setListeners() {
-        profileBtn.setOnClickListener(new View.OnClickListener() {
+
+        choosePhotoBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_PICK,
-                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(intent, RESULT_LOAD_IMAGE);
+                try {
+                    if (ActivityCompat.checkSelfPermission(AddEditUserActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(AddEditUserActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, PICK_FROM_GALLERY);
+                    } else {
+                        Intent galleryIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                        startActivityForResult(galleryIntent, PICK_FROM_GALLERY);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -83,9 +120,9 @@ public class AddEditUserActivity extends AppCompatActivity {
         familySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(!isChecked){
+                if (!isChecked) {
                     guestView.setVisibility(View.VISIBLE);
-                } else{
+                } else {
                     guestView.setVisibility(View.INVISIBLE);
                 }
 
@@ -121,13 +158,14 @@ public class AddEditUserActivity extends AppCompatActivity {
 
     }
 
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // TODO Auto-generated method stub
         super.onActivityResult(requestCode, resultCode, data);
 
         try {
-            if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
+            if (requestCode == PICK_FROM_GALLERY && resultCode == RESULT_OK && null != data) {
 
                 Uri selectedImage = data.getData();
                 String[] filePathColumn = {MediaStore.Images.Media.DATA};

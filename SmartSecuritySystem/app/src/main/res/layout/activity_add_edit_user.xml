@@ -33,12 +33,14 @@
             android:scaleType="fitCenter"
             android:src="@mipmap/ic_portrait" />
 
+
         <Button
-            android:id="@+id/profile_image_btn"
+            android:id="@+id/choose_photo_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Edit Photo" />
+            android:text="Choose Photo" />
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -123,7 +125,7 @@
                 android:layout_alignParentEnd="true"
                 android:clickable="true"
                 android:focusable="false"
-                android:hint="mm/dd/yyyy"/>
+                android:hint="mm/dd/yyyy" />
 
         </RelativeLayout>
 
