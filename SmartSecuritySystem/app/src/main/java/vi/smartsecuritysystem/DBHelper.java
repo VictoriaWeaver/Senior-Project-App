@@ -18,7 +18,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 1;
 
-    private static final String DATABASE_NAME = "usersManager";
+    private static final String DATABASE_NAME = "usersManager.db";
     private static final String TABLE_USERS = "users";
 
     private static final String KEY_ID = "id";
