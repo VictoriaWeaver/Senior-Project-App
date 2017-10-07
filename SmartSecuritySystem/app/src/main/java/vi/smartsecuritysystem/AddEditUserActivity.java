@@ -2,7 +2,9 @@ package vi.smartsecuritysystem;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -46,11 +48,15 @@ public class AddEditUserActivity extends AppCompatActivity {
     private String imgDecodableString;
     private Button doneBtn;
     private EditText nameEdit;
+    private EditText emailEdit;
+    private EditText passwordEdit;
     private EditText accountExpDate;
     private RelativeLayout guestView;
     private boolean guestFlag = false;
     private Switch familySwitch;
     private Switch adminSwitch;
+
+    boolean userIsAdmin = true;
 
 
     @Override
@@ -64,11 +70,18 @@ public class AddEditUserActivity extends AppCompatActivity {
         profileImage = (ImageView) findViewById(R.id.profile_image);
         choosePhotoBtn = (Button) findViewById(R.id.choose_photo_btn);
         nameEdit = (EditText) findViewById(R.id.user_name);
+        emailEdit = (EditText) findViewById(R.id.user_email);
+        passwordEdit = (EditText) findViewById(R.id.user_password);
         adminSwitch = (Switch) findViewById(R.id.admin_btn);
         familySwitch = (Switch) findViewById(R.id.family_btn);
         guestView = (RelativeLayout) findViewById(R.id.guest_account_view);
         accountExpDate = (EditText) findViewById(R.id.guest_account_expiration_date);
         doneBtn = (Button) findViewById(R.id.done_btn);
+
+        //
+        if (!userIsAdmin) {
+            adminSwitch.setEnabled(false);
+        }
 
         //set GuestFlag based on previous activity
         familySwitch.setChecked(!guestFlag);
@@ -116,16 +129,57 @@ public class AddEditUserActivity extends AppCompatActivity {
             }
         });
 
+        adminSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (userIsAdmin) {
+                    if (isChecked) {
+                        AlertDialog alertDialog = new AlertDialog.Builder(AddEditUserActivity.this).create();
+                        alertDialog.setTitle("Warning");
+                        alertDialog.setMessage("Are you sure you want to grant this user Admin rights?");
+                        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "YES",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                });
+                        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "CANCEL",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                        adminSwitch.setChecked(false);
+                                    }
+                                });
+                        alertDialog.show();
+                        familySwitch.setChecked(true);
+                    }
+                }
+
+            }
+        });
 
         familySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (!isChecked) {
-                    guestView.setVisibility(View.VISIBLE);
+                if (adminSwitch.isChecked()) {
+                    //Admins must be family accounts
+                    AlertDialog alertDialog = new AlertDialog.Builder(AddEditUserActivity.this).create();
+                    alertDialog.setMessage("Admin users must be Family Users");
+                    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                    familySwitch.setChecked(true);
                 } else {
-                    guestView.setVisibility(View.INVISIBLE);
+                    if (!isChecked) {
+                        guestView.setVisibility(View.VISIBLE);
+                    } else {
+                        guestView.setVisibility(View.INVISIBLE);
+                    }
                 }
-
             }
         });
 

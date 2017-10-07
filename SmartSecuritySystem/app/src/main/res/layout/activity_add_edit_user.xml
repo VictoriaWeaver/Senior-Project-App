@@ -18,126 +18,159 @@
         tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="0dp" />
 
-    <LinearLayout
+    <ScrollView
+        android:id="@+id/login_form"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="@dimen/activity_horizontal_margin">
-
-        <ImageView
-            android:id="@+id/profile_image"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_alignParentTop="true"
-            android:background="@android:color/transparent"
-            android:scaleType="fitCenter"
-            android:src="@mipmap/ic_portrait" />
-
-
-        <Button
-            android:id="@+id/choose_photo_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Choose Photo" />
-
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/main_btn_height"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/activity_horizontal_margin">
 
-            <TextView
+            <ImageView
+                android:id="@+id/profile_image"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_alignParentTop="true"
+                android:background="@android:color/transparent"
+                android:scaleType="fitCenter"
+                android:src="@mipmap/ic_portrait" />
+
+
+            <Button
+                android:id="@+id/choose_photo_btn"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="Name: " />
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:backgroundTint="@color/familyPrimary"
+                android:text="Choose Photo"
+                android:textColor="@android:color/white" />
 
-            <EditText
-                android:id="@+id/user_name"
-                android:layout_width="fill_parent"
-                android:layout_height="match_parent"
-                android:gravity="center" />
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/user_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Name (First and Last)"
+                    android:inputType="textPersonName"
+                    android:maxLines="1"
+                    android:singleLine="true" />
+
+            </android.support.design.widget.TextInputLayout>
+
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/user_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Email Address"
+                    android:inputType="textEmailAddress"
+                    android:maxLines="1"
+                    android:singleLine="true" />
+
+            </android.support.design.widget.TextInputLayout>
+
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/user_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Password"
+                    android:inputType="textPassword"
+                    android:maxLines="1"
+                    android:singleLine="true" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/main_btn_height">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentStart="true"
+                    android:gravity="center"
+                    android:text="Admin " />
+
+
+                <Switch
+                    android:id="@+id/admin_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:enabled="true" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/main_btn_height">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentStart="true"
+                    android:gravity="center"
+                    android:text="Family " />
+
+
+                <Switch
+                    android:id="@+id/family_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:enabled="true" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/guest_account_view"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/main_btn_height">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentStart="true"
+                    android:gravity="center"
+                    android:text="Account Expiration Date" />
+
+                <EditText
+                    android:id="@+id/guest_account_expiration_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:clickable="true"
+                    android:focusable="false"
+                    android:hint="mm/dd/yyyy" />
+
+            </RelativeLayout>
+
+            <Button
+                android:id="@+id/done_btn"
+                android:layout_width="@dimen/main_btn_width"
+                android:layout_height="@dimen/main_btn_height"
+                android:layout_gravity="center"
+                android:backgroundTint="@color/familyPrimary"
+                android:text="Done"
+                android:textColor="@android:color/white" />
+
 
         </LinearLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/main_btn_height"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentStart="true"
-                android:gravity="center"
-                android:text="Admin " />
-
-
-            <Switch
-                android:id="@+id/admin_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentEnd="true"
-                android:enabled="true" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/main_btn_height"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentStart="true"
-                android:gravity="center"
-                android:text="Family " />
-
-
-            <Switch
-                android:id="@+id/family_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentEnd="true"
-                android:enabled="true" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/guest_account_view"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/main_btn_height"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentStart="true"
-                android:gravity="center"
-                android:text="Account Expiration Date" />
-
-            <EditText
-                android:id="@+id/guest_account_expiration_date"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentEnd="true"
-                android:clickable="true"
-                android:focusable="false"
-                android:hint="mm/dd/yyyy" />
-
-        </RelativeLayout>
-
-        <Button
-            android:id="@+id/done_btn"
-            android:layout_width="@dimen/main_btn_width"
-            android:layout_height="@dimen/main_btn_height"
-            android:layout_gravity="center"
-            android:backgroundTint="@color/familyPrimary"
-            android:text="Done"
-            android:textColor="@android:color/white" />
-
-    </LinearLayout>
-
+    </ScrollView>
 </LinearLayout>
