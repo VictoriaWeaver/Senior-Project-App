@@ -15,10 +15,42 @@
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Dark"
-        tools:layout_editor_absoluteX="8dp"
-        tools:layout_editor_absoluteY="0dp" />
+        tools:layout_editor_absoluteY="0dp"
+        tools:layout_editor_absoluteX="8dp" />
 
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="@dimen/activity_horizontal_margin">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Current Status: UNLOCKED"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
+
+        <Button
+            android:id="@+id/remote_lock_btn"
+            android:layout_width="@dimen/main_btn_width"
+            android:layout_height="@dimen/main_btn_height"
+            android:backgroundTint="@android:color/holo_red_dark"
+            android:text="LOCK"
+            android:textColor="@android:color/white" />
+
+        <Button
+            android:id="@+id/remote_unlock_btn"
+            android:layout_width="@dimen/main_btn_width"
+            android:layout_height="@dimen/main_btn_height"
+            android:backgroundTint="@android:color/holo_green_dark"
+            android:text="UNLOCK"
+            android:textColor="@android:color/white" />
+
+
+    </LinearLayout>
 
 
 </LinearLayout>

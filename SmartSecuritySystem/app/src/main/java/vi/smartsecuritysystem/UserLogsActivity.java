@@ -6,6 +6,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+
 public class UserLogsActivity extends AppCompatActivity {
 
     @Override
@@ -44,4 +47,5 @@ public class UserLogsActivity extends AppCompatActivity {
 
         return super.onCreateOptionsMenu(menu);
     }
+
 }
