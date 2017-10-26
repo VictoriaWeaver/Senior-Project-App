@@ -55,6 +55,7 @@ public class ControlActivity extends AppCompatActivity {
 
         unlockBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+
                 try {
                     //gpio high
                     //new Background_get().execute("gpio=1");
@@ -62,6 +63,10 @@ public class ControlActivity extends AppCompatActivity {
                     String log = "<USER> UNLOCK <TIME>";
                     Log.w(TAG, log);
 
+                    FileOutputStream outputStream;
+                    outputStream = openFileOutput(filename, MODE_APPEND);
+                    outputStream.write(log.getBytes());
+                    outputStream.close();
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -77,6 +82,11 @@ public class ControlActivity extends AppCompatActivity {
 
                     String log = "<USER> LOCK <TIME>";
                     Log.w(TAG, log);
+
+                    FileOutputStream outputStream;
+                    outputStream = openFileOutput(filename, MODE_APPEND);
+                    outputStream.write(log.getBytes());
+                    outputStream.close();
 
                 } catch (Exception e) {
                     e.printStackTrace();
