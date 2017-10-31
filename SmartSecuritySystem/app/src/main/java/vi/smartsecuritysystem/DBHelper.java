@@ -34,10 +34,11 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_USERS_TABLE = "CREATE TABLE " + TABLE_USERS + "("
+        String CREATE_USERS_TABLE = "CREATE TABLE " + TABLE_USERS + " ("
                 + KEY_ID + " INTEGER PRIMARY KEY," + KEY_NAME + " TEXT,"
-                + KEY_ADMIN + " INTEGER" + KEY_FAMILY + " INTEGER," + ")";
+                + KEY_ADMIN + " INTEGER, " + KEY_FAMILY + " INTEGER" + ")";
         db.execSQL(CREATE_USERS_TABLE);
+        User.nextid = 1;
     }
 
     @Override
@@ -55,13 +56,14 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
+        values.put(KEY_ID, user.getID());
         values.put(KEY_NAME, user.getName()); // User Name
-        values.put(KEY_ADMIN, user.isAdmin()); // Is Admin
-        values.put(KEY_FAMILY, user.isFamily()); // Is Family
+        values.put(KEY_ADMIN, 0);//user.isAdmin()); // Is Admin
+        values.put(KEY_FAMILY, 1);//user.isFamily()); // Is Family
 
-        // Inserting Row
-        db.insert(TABLE_USERS, null, values);
-        db.close(); // Closing database connection
+        long rowID = db.insert(TABLE_USERS, null, values);
+        int i = 0;
+        //db.close(); // Closing database connection
     }
 
     // Getting single user
@@ -88,11 +90,12 @@ public class DBHelper extends SQLiteOpenHelper {
         // Select All Query
         String selectQuery = "SELECT  * FROM " + TABLE_USERS;
 
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
 
         // looping through all rows and adding to list
         if (cursor.moveToFirst()) {
+            System.out.println("in");
             do {
                 User user = new User();
                 user.setID(Integer.parseInt(cursor.getString(0)));

@@ -29,8 +29,6 @@ public class MainActivity extends AppCompatActivity {
 
         setupButtons();
 
-
-
     }
 
     private void setupButtons(){

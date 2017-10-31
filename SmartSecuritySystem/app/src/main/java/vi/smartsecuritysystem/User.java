@@ -6,13 +6,18 @@ package vi.smartsecuritysystem;
 
 public class User {
 
+    public static int nextid;
+
     private int _id;
     private String _name;
     private boolean _admin;
     private boolean _family;
 
     public User(){
-
+        this._id = 0;
+        this._name = "null";
+        this._family = false;
+        this._admin = false;
     }
 
     public User(int id, String name, boolean family, boolean admin) {

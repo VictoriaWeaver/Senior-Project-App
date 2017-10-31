@@ -45,13 +45,23 @@ public class GuestAccountsActivity extends AppCompatActivity {
 
     private void displayUsers(RecyclerView userRecyclerView) {
 
-        // Temporary list in while DB is in development
+        DBHelper dbHelp = new DBHelper(this);
+        List<User> lst =  dbHelp.getAllUsers();
+
         List<String> usernames = new ArrayList<String>();
+
+        for(User u : lst){
+            if(!u.isFamily()) {
+                usernames.add(u.getName());
+            }
+        }
+
+        // Temporary list in while DB is in development
         usernames.add("Bob");
-        usernames.add("Linda");
-        usernames.add("Tina");
-        usernames.add("Gene");
-        usernames.add("Louise");
+        //usernames.add("Linda");
+        //usernames.add("Tina");
+        //usernames.add("Gene");
+        //usernames.add("Louise");
 
 
         userRecyclerView.setHasFixedSize(true);

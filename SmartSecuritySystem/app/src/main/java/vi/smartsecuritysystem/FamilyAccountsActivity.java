@@ -1,6 +1,7 @@
 package vi.smartsecuritysystem;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -48,12 +49,22 @@ public class FamilyAccountsActivity extends AppCompatActivity {
 
     private void displayUsers(RecyclerView userRecyclerView) {
 
-        // Temporary list in while DB is in development
+        DBHelper dbHelp = new DBHelper(this);
+        List<User> lst =  dbHelp.getAllUsers();
+
         List<String> usernames = new ArrayList<String>();
-        usernames.add("Victoria");
-        usernames.add("Prathibha");
-        usernames.add("Ram");
-        usernames.add("Kevin");
+
+        for(User u : lst){
+            if(u.isFamily()) {
+                usernames.add(u.getName());
+            }
+        }
+
+        // Temporary list in while DB is in development
+        //usernames.add("Victoria");
+        //usernames.add("Prathibha");
+        //usernames.add("Ram");
+        //usernames.add("Kevin");
 
 
         userRecyclerView.setHasFixedSize(true);
