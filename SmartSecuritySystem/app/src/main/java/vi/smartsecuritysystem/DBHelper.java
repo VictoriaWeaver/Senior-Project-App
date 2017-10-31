@@ -58,11 +58,19 @@ public class DBHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(KEY_ID, user.getID());
         values.put(KEY_NAME, user.getName()); // User Name
-        values.put(KEY_ADMIN, 0);//user.isAdmin()); // Is Admin
-        values.put(KEY_FAMILY, 1);//user.isFamily()); // Is Family
-
+        if(user.isAdmin()==false) {
+            values.put(KEY_ADMIN, 0); // Is Admin
+        }
+        else{
+            values.put(KEY_ADMIN, 1); // Is Admin
+        }
+        if(user.isFamily()==false) {
+            values.put(KEY_FAMILY, 0); // Is Admin
+        }
+        else{
+            values.put(KEY_FAMILY, 1); // Is Admin
+        }
         long rowID = db.insert(TABLE_USERS, null, values);
-        int i = 0;
         //db.close(); // Closing database connection
     }
 
@@ -95,7 +103,6 @@ public class DBHelper extends SQLiteOpenHelper {
 
         // looping through all rows and adding to list
         if (cursor.moveToFirst()) {
-            System.out.println("in");
             do {
                 User user = new User();
                 user.setID(Integer.parseInt(cursor.getString(0)));

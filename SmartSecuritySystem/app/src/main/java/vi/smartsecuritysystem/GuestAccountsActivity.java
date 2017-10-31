@@ -58,10 +58,6 @@ public class GuestAccountsActivity extends AppCompatActivity {
 
         // Temporary list in while DB is in development
         usernames.add("Bob");
-        //usernames.add("Linda");
-        //usernames.add("Tina");
-        //usernames.add("Gene");
-        //usernames.add("Louise");
 
 
         userRecyclerView.setHasFixedSize(true);

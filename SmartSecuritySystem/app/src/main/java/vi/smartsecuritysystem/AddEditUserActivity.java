@@ -63,8 +63,6 @@ public class AddEditUserActivity extends AppCompatActivity {
 
     boolean userIsAdmin = true;
 
-    private static int user_id;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -212,7 +210,7 @@ public class AddEditUserActivity extends AppCompatActivity {
 
         doneBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                User u = new User(User.nextid,nameEdit.getText().toString(),familySwitch.getShowText(),adminSwitch.getShowText());
+                User u = new User(User.nextid,nameEdit.getText().toString(),!familySwitch.getShowText(),adminSwitch.getShowText());
                 User.nextid++;
                 DBHelper dbHelp = new DBHelper(getApplicationContext());
                 dbHelp.addUser(u);
