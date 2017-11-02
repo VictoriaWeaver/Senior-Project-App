@@ -3,6 +3,8 @@ package vi.smartsecuritysystem;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.provider.MediaStore;
+import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -27,13 +29,16 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.DateFormat;
+import java.util.Date;
 
 public class ControlActivity extends AppCompatActivity {
 
     private static final String TAG = "ControlActivity";
+    private static final int maxLines = 20;
     private Button unlockBtn;
     private Button lockBtn;
-    private String filename = "History.txt";
+    private String fileName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +47,8 @@ public class ControlActivity extends AppCompatActivity {
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
+
+        fileName = getString(R.string.log_file);
 
         unlockBtn = (Button) findViewById(R.id.remote_unlock_btn);
         lockBtn = (Button) findViewById(R.id.remote_lock_btn);
@@ -55,16 +62,21 @@ public class ControlActivity extends AppCompatActivity {
 
         unlockBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
                 try {
                     //gpio high
-                    //new Background_get().execute("gpio=1");
+//                    new Background_get().execute("gpio=1");
 
-                    String log = "<USER> UNLOCK <TIME>";
+                    String currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
+
+                    String log = "<USER> UNLOCK " + currentDateTimeString + "\n";
                     Log.w(TAG, log);
 
                     FileOutputStream outputStream;
-                    outputStream = openFileOutput(filename, MODE_APPEND);
+                    if(isFull()){
+                        outputStream = openFileOutput(fileName, MODE_PRIVATE);
+                    } else {
+                        outputStream = openFileOutput(fileName, MODE_APPEND);
+                    }
                     outputStream.write(log.getBytes());
                     outputStream.close();
 
@@ -78,13 +90,20 @@ public class ControlActivity extends AppCompatActivity {
             public void onClick(View v) {
                 try {
                     //gpio low
-                    //new Background_get().execute("gpio=0");
+//                    new Background_get().execute("gpio=0");
 
-                    String log = "<USER> LOCK <TIME>";
+                    String currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
+
+                    String log = "<USER> LOCK " + currentDateTimeString + "\n";
                     Log.w(TAG, log);
 
                     FileOutputStream outputStream;
-                    outputStream = openFileOutput(filename, MODE_APPEND);
+                    if(isFull()){
+                        outputStream = openFileOutput(fileName, MODE_PRIVATE);
+                    } else {
+                        outputStream = openFileOutput(fileName, MODE_APPEND);
+                    }
+
                     outputStream.write(log.getBytes());
                     outputStream.close();
 
@@ -94,6 +113,21 @@ public class ControlActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private boolean isFull(){
+        try (BufferedReader input = new BufferedReader(new InputStreamReader(
+                openFileInput(fileName))); ){
+            String line;
+            int count = 0;
+            while ((line = input.readLine()) != null) {
+                count++;
+            }
+            return (count >= maxLines);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return true;
     }
 
 //    private class Background_get extends AsyncTask<String, Void, String> {
