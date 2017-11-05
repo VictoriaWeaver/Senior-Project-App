@@ -64,7 +64,7 @@ public class ControlActivity extends AppCompatActivity {
             public void onClick(View v) {
                 try {
                     //gpio high
-//                    new Background_get().execute("gpio=1");
+                    new Background_get().execute("gpio_unlock=0");
 
                     String currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
 
@@ -90,7 +90,7 @@ public class ControlActivity extends AppCompatActivity {
             public void onClick(View v) {
                 try {
                     //gpio low
-//                    new Background_get().execute("gpio=0");
+                    new Background_get().execute("gpio_lock=0");
 
                     String currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
 
@@ -130,31 +130,31 @@ public class ControlActivity extends AppCompatActivity {
         return true;
     }
 
-//    private class Background_get extends AsyncTask<String, Void, String> {
-//        @Override
-//        protected String doInBackground(String... params) {
-//            try {
-//
-//                //change the ip to the pi's ip
-//                URL url = new URL("http://192.168.1.177/?" + params[0]);
-//                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-//
-//                BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-//                StringBuilder result = new StringBuilder();
-//                String inputLine;
-//                while ((inputLine = in.readLine()) != null)
-//                    result.append(inputLine).append("\n");
-//
-//                in.close();
-//                connection.disconnect();
-//                return result.toString();
-//
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//            return null;
-//        }
-//    }
+    private class Background_get extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+
+                //change the ip to the pi's ip
+                URL url = new URL("http://129.21.107.123/?" + params[0]);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+                BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                StringBuilder result = new StringBuilder();
+                String inputLine;
+                while ((inputLine = in.readLine()) != null)
+                    result.append(inputLine).append("\n");
+
+                in.close();
+                connection.disconnect();
+                return result.toString();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+    }
 
 
     @Override
