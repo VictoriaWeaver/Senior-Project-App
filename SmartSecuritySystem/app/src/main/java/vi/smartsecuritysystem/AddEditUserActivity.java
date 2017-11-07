@@ -4,10 +4,12 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
@@ -39,6 +41,9 @@ import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+
 public class AddEditUserActivity extends AppCompatActivity {
 
     private static final int PICK_FROM_GALLERY = 1;
@@ -57,7 +62,6 @@ public class AddEditUserActivity extends AppCompatActivity {
     private Switch adminSwitch;
 
     boolean userIsAdmin = true;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -206,7 +210,15 @@ public class AddEditUserActivity extends AppCompatActivity {
 
         doneBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                //TODO Add user to database
+                String saltedPassword = DBHelper.SALT + passwordEdit.getText().toString();
+                String hashedPassword = DBHelper.generateHash(saltedPassword);
+                User u = new User(User.nextid,nameEdit.getText().toString(),!familySwitch.getShowText(),adminSwitch.getShowText(),
+                    emailEdit.getText().toString(),hashedPassword);
+                User.nextid++;
+                DBHelper dbHelp = new DBHelper(getApplicationContext());
+                dbHelp.addUser(u);
+
+                startActivity(new Intent(AddEditUserActivity.this, MainActivity.class));
             }
         });
 

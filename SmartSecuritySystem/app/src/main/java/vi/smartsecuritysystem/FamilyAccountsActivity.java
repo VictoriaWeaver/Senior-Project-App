@@ -1,12 +1,14 @@
 package vi.smartsecuritysystem;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,6 +16,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.List;
+
 import java.util.List;
 
 public class FamilyAccountsActivity extends AppCompatActivity {
@@ -45,13 +49,17 @@ public class FamilyAccountsActivity extends AppCompatActivity {
 
     private void displayUsers(RecyclerView userRecyclerView) {
 
-        // Temporary list in while DB is in development
-        List<String> usernames = new ArrayList<String>();
-        usernames.add("Victoria");
-        usernames.add("Prathibha");
-        usernames.add("Ram");
-        usernames.add("Kevin");
+        DBHelper dbHelp = new DBHelper(this);
 
+        List<User> lst =  dbHelp.getAllUsers();
+
+        List<String> usernames = new ArrayList<String>();
+
+        for(User u : lst){
+            if(u.isFamily()) {
+                usernames.add(u.getName());
+            }
+        }
 
         userRecyclerView.setHasFixedSize(true);
 
