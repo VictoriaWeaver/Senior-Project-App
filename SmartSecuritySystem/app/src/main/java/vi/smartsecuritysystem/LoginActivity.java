@@ -160,13 +160,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         boolean cancel = false;
         View focusView = null;
 
-        // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
-            mPasswordView.setError(getString(R.string.error_invalid_password));
-            focusView = mPasswordView;
-            cancel = true;
-        }
-
         // Check for a valid email address.
         if (TextUtils.isEmpty(email)) {
             mEmailView.setError(getString(R.string.error_field_required));
@@ -175,6 +168,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         } else if (!isEmailValid(email)) {
             mEmailView.setError(getString(R.string.error_invalid_email));
             focusView = mEmailView;
+            cancel = true;
+        }
+
+        // Check for a valid password, if the user entered one.
+        if (!isPasswordValid(email,password)){ //&& !TextUtils.isEmpty(password)) {
+            mPasswordView.setError(getString(R.string.error_invalid_password));
+            focusView = mPasswordView;
             cancel = true;
         }
 
@@ -192,13 +192,32 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
 
     private boolean isEmailValid(String email) {
-        //TODO: Replace this with your own logic
+
+        DBHelper dbHelp = new DBHelper(this);
+        if(dbHelp.emailExists(email)){
+            return true; //if email exists
+        }
         return email.contains("@");
     }
 
-    private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
-        return password.length() > 4;
+    private boolean isPasswordValid(String email, String password) {
+
+        DBHelper dbHelp = new DBHelper(this);
+        if(dbHelp.emailExists(email)) {
+            User u = dbHelp.getUser(email);
+            String saltedPassword = DBHelper.SALT + password;
+            String hashedPassword = DBHelper.generateHash(saltedPassword);
+
+            if (hashedPassword.equals(u.getPassword())) {
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+        else{
+            return false;
+        }
     }
 
     /**

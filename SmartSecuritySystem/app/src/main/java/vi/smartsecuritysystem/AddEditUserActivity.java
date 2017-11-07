@@ -210,7 +210,10 @@ public class AddEditUserActivity extends AppCompatActivity {
 
         doneBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                User u = new User(User.nextid,nameEdit.getText().toString(),!familySwitch.getShowText(),adminSwitch.getShowText());
+                String saltedPassword = DBHelper.SALT + passwordEdit.getText().toString();
+                String hashedPassword = DBHelper.generateHash(saltedPassword);
+                User u = new User(User.nextid,nameEdit.getText().toString(),!familySwitch.getShowText(),adminSwitch.getShowText(),
+                    emailEdit.getText().toString(),hashedPassword);
                 User.nextid++;
                 DBHelper dbHelp = new DBHelper(getApplicationContext());
                 dbHelp.addUser(u);

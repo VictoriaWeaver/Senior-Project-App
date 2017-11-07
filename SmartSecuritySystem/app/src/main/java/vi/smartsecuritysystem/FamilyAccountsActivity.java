@@ -50,6 +50,7 @@ public class FamilyAccountsActivity extends AppCompatActivity {
     private void displayUsers(RecyclerView userRecyclerView) {
 
         DBHelper dbHelp = new DBHelper(this);
+
         List<User> lst =  dbHelp.getAllUsers();
 
         List<String> usernames = new ArrayList<String>();
@@ -59,13 +60,6 @@ public class FamilyAccountsActivity extends AppCompatActivity {
                 usernames.add(u.getName());
             }
         }
-
-        // Temporary list in while DB is in development
-        //usernames.add("Victoria");
-        //usernames.add("Prathibha");
-        //usernames.add("Ram");
-        //usernames.add("Kevin");
-
 
         userRecyclerView.setHasFixedSize(true);
 

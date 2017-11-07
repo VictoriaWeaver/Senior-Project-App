@@ -12,25 +12,33 @@ public class User {
     private String _name;
     private boolean _admin;
     private boolean _family;
+    private String _email;
+    private String _password;
 
     public User(){
         this._id = 0;
         this._name = "null";
         this._family = false;
         this._admin = false;
+        this._email = "null";
+        this._password = "null";
     }
 
-    public User(int id, String name, boolean family, boolean admin) {
+    public User(int id, String name, boolean family, boolean admin, String email, String password) {
         this._id = id;
         this._name = name;
         this._admin = admin;
         this._family = family;
+        this._email = email;
+        this._password = password;
     }
 
-    public User(String name, boolean family, boolean admin) {
+    public User(String name, boolean family, boolean admin, String email, String password) {
         this._name = name;
         this._admin = admin;
         this._family = family;
+        this._email = email;
+        this._password = password;
     }
 
     public int getID(){
@@ -49,6 +57,10 @@ public class User {
         return this._family;
     }
 
+    public String getEmail() { return this._email; }
+
+    public String getPassword() { return this._password; }
+
     public void setID(int id){
         this._id = id;
     }
@@ -63,6 +75,14 @@ public class User {
 
     public void setFamily(boolean family){
         this._family = family;
+    }
+
+    public void setEmail(String email){
+        this._email = email;
+    }
+
+    public void setPassword(String password){
+        this._password = password;
     }
 
 }

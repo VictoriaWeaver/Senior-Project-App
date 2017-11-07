@@ -9,6 +9,8 @@ import android.provider.BaseColumns;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 /**
  * Created by victoria on 9/7/2017.
@@ -25,6 +27,10 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String KEY_NAME = "name";
     private static final String KEY_ADMIN = "admin";
     private static final String KEY_FAMILY = "family";
+    private static final String KEY_EMAIL = "email";
+    private static final String KEY_PASSWORD = "password";
+
+    public static final String SALT = "my-salt-text";
 
 
     public DBHelper(Context context) {
@@ -36,9 +42,15 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         String CREATE_USERS_TABLE = "CREATE TABLE " + TABLE_USERS + " ("
                 + KEY_ID + " INTEGER PRIMARY KEY," + KEY_NAME + " TEXT,"
-                + KEY_ADMIN + " INTEGER, " + KEY_FAMILY + " INTEGER" + ")";
+                + KEY_ADMIN + " INTEGER," + KEY_FAMILY + " INTEGER," + KEY_EMAIL
+                + " TEXT UNIQUE," + KEY_PASSWORD + "TEXT" + ")";
         db.execSQL(CREATE_USERS_TABLE);
-        User.nextid = 1;
+
+        String saltedPassword = SALT + "password";
+        String hashedPassword = generateHash(saltedPassword);
+        User u = new User(1,"Admin",true,false,"Admin@gmail.com",hashedPassword);
+        User.nextid = 2;
+        this.addUser(u);
     }
 
     @Override
@@ -70,6 +82,8 @@ public class DBHelper extends SQLiteOpenHelper {
         else{
             values.put(KEY_FAMILY, 1); // Is Admin
         }
+        values.put(KEY_EMAIL,user.getEmail());
+        values.put(KEY_PASSWORD,user.getPassword());
         long rowID = db.insert(TABLE_USERS, null, values);
         //db.close(); // Closing database connection
     }
@@ -78,7 +92,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public User getUser(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(TABLE_USERS, new String[]{KEY_ID, KEY_NAME, KEY_ADMIN,
-                KEY_FAMILY}, KEY_ID + "=?", new String[]{String.valueOf(id)}, null, null, null, null);
+                KEY_FAMILY,KEY_EMAIL,KEY_PASSWORD}, KEY_ID + "=?", new String[]{String.valueOf(id)}, null, null, null, null);
 
         if (cursor != null)
             cursor.moveToFirst();
@@ -87,7 +101,24 @@ public class DBHelper extends SQLiteOpenHelper {
         boolean family = (cursor.getInt(3) != 0);
 
         User user = new User(Integer.parseInt(cursor.getString(0)),
-                cursor.getString(1), admin, family);
+                cursor.getString(1), admin, family, cursor.getString(4),cursor.getString(5));
+        // return user
+        return user;
+    }
+
+    public User getUser(String email) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String selectQuery = "SELECT  * FROM " + TABLE_USERS + " WHERE EMAIL='"+email+"'";
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor != null)
+            cursor.moveToFirst();
+
+        boolean admin = (cursor.getInt(2) != 0);
+        boolean family = (cursor.getInt(3) != 0);
+
+        User user = new User(Integer.parseInt(cursor.getString(0)),
+                cursor.getString(1), admin, family, cursor.getString(4),cursor.getString(5));
         // return user
         return user;
     }
@@ -109,6 +140,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 user.setName(cursor.getString(1));
                 user.setAdmin(Integer.parseInt(cursor.getString(2)) != 0);
                 user.setFamily(Integer.parseInt(cursor.getString(3)) != 0);
+                user.setEmail(cursor.getString(4));
+                user.setPassword(cursor.getString(5));
                 // Adding contact to list
                 userList.add(user);
             } while (cursor.moveToNext());
@@ -123,7 +156,7 @@ public class DBHelper extends SQLiteOpenHelper {
         String countQuery = "SELECT  * FROM " + TABLE_USERS;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(countQuery, null);
-        cursor.close();
+        //cursor.close();
 
         // return count
         return cursor.getCount();
@@ -135,9 +168,12 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
+        //might need to put ID in values too
         values.put(KEY_NAME, user.getName());
         values.put(KEY_ADMIN, user.isAdmin());
         values.put(KEY_FAMILY, user.isFamily());
+        values.put(KEY_EMAIL, user.getEmail());
+        values.put(KEY_PASSWORD, user.getPassword());
 
         // updating row
         return db.update(TABLE_USERS, values, KEY_ID + " = ?",
@@ -152,5 +188,39 @@ public class DBHelper extends SQLiteOpenHelper {
         db.close();
     }
 
+    public boolean emailExists(String email){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String selectQuery = "SELECT email FROM " + TABLE_USERS + " WHERE email='"+email+"'";
+
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        //cursor.close();
+
+        if(cursor.getCount()!=0){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    public static String generateHash(String input) {
+        StringBuilder hash = new StringBuilder();
+
+        try {
+            MessageDigest sha = MessageDigest.getInstance("SHA-1");
+            byte[] hashedBytes = sha.digest(input.getBytes());
+            char[] digits = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+                    'a', 'b', 'c', 'd', 'e', 'f' };
+            for (int idx = 0; idx < hashedBytes.length; ++idx) {
+                byte b = hashedBytes[idx];
+                hash.append(digits[(b & 0xf0) >> 4]);
+                hash.append(digits[b & 0x0f]);
+            }
+        } catch (NoSuchAlgorithmException e) {
+            // handle error here.
+        }
+
+        return hash.toString();
+    }
 
 }
