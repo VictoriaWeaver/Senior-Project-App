@@ -64,7 +64,7 @@ public class ControlActivity extends AppCompatActivity {
             public void onClick(View v) {
                 try {
                     //gpio high
-                    new Background_get().execute("gpio_unlock=0");
+                    new Background_get().execute("unlock.php");
 
                     String currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
 
@@ -90,7 +90,7 @@ public class ControlActivity extends AppCompatActivity {
             public void onClick(View v) {
                 try {
                     //gpio low
-                    new Background_get().execute("gpio_lock=0");
+                    new Background_get().execute("lock.php");
 
                     String currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
 
@@ -135,9 +135,11 @@ public class ControlActivity extends AppCompatActivity {
         protected String doInBackground(String... params) {
             try {
 
-                //change the ip to the pi's ip
-                URL url = new URL("http://129.21.107.123/?" + params[0]);
+                //TODO set the IP address to the domain name on the RIT network
+                URL url = new URL("http://psr6237.student.rit.edu/home/" + params[0]);
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+                connection.connect();
 
                 BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                 StringBuilder result = new StringBuilder();
@@ -147,12 +149,13 @@ public class ControlActivity extends AppCompatActivity {
 
                 in.close();
                 connection.disconnect();
+
                 return result.toString();
 
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            return null;
+                                                                                                                                                                                                                                                    return null;
         }
     }
 
