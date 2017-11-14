@@ -59,13 +59,5 @@
             android:text="@string/user_logs"
             android:textColor="@android:color/white" />
 
-        <Button
-            android:id="@+id/camera_feed_btn"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/main_btn_height"
-            android:layout_margin="@dimen/activity_horizontal_margin"
-            android:background="@drawable/rectangle_btn"
-            android:text="@string/camera_feed"
-            android:textColor="@android:color/white" />
     </LinearLayout>
 </LinearLayout>
