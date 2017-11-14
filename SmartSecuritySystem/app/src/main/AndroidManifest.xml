@@ -38,10 +38,6 @@
             android:label="@string/control"
             android:theme="@style/AppThemeControl" />
         <activity
-            android:name=".CameraFeedActivity"
-            android:label="@string/camera_feed"
-            android:theme="@style/AppThemeCamera" />
-        <activity
             android:name=".UserLogsActivity"
             android:label="@string/user_logs"
             android:theme="@style/AppThemeLogs" />

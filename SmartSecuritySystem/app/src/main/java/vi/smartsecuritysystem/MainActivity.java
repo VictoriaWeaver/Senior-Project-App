@@ -16,7 +16,6 @@ public class MainActivity extends AppCompatActivity {
     private Button familyAccountsBtn;
     private Button guestAccountsBtn;
     private Button controlBtn;
-    private Button cameraFeedBtn;
     private Button userLogsBtn;
 
     @Override
@@ -36,7 +35,6 @@ public class MainActivity extends AppCompatActivity {
         guestAccountsBtn = (Button) findViewById(R.id.guest_accounts_btn);
         controlBtn = (Button) findViewById(R.id.control_btn);
         userLogsBtn = (Button) findViewById(R.id.user_logs_btn);
-        cameraFeedBtn = (Button) findViewById(R.id.camera_feed_btn);
 
         familyAccountsBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -59,11 +57,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, UserLogsActivity.class));
             }
         });
-        cameraFeedBtn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, CameraFeedActivity.class));
-            }
-        });
+
     }
 
     @Override
