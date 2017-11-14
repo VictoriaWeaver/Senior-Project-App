@@ -27,10 +27,11 @@
         android:padding="@dimen/activity_horizontal_margin">
 
         <TextView
+            android:id="@+id/status"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="Current Status: UNLOCKED"
+            android:text="@string/status"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
 
         <Button
@@ -38,7 +39,7 @@
             android:layout_width="@dimen/main_btn_width"
             android:layout_height="@dimen/main_btn_height"
             android:backgroundTint="@android:color/holo_red_dark"
-            android:text="LOCK"
+            android:text="@string/lock"
             android:textColor="@android:color/white" />
 
         <Button
@@ -46,7 +47,7 @@
             android:layout_width="@dimen/main_btn_width"
             android:layout_height="@dimen/main_btn_height"
             android:backgroundTint="@android:color/holo_green_dark"
-            android:text="UNLOCK"
+            android:text="@string/unlock"
             android:textColor="@android:color/white" />
 
 

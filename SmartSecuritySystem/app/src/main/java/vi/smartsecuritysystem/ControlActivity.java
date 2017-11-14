@@ -2,6 +2,7 @@ package vi.smartsecuritysystem;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.provider.Settings;
@@ -39,6 +40,9 @@ public class ControlActivity extends AppCompatActivity {
     private Button unlockBtn;
     private Button lockBtn;
     private String fileName;
+    private TextView statusView;
+    private boolean status;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,9 +56,25 @@ public class ControlActivity extends AppCompatActivity {
 
         unlockBtn = (Button) findViewById(R.id.remote_unlock_btn);
         lockBtn = (Button) findViewById(R.id.remote_lock_btn);
+        statusView = (TextView) findViewById(R.id.status);
+
+        status = getStatus();
+
+        Resources res = getResources();
+        String text = "";
+        if(status){
+            text = res.getString(R.string.status, "LOCKED");
+        } else {
+            text = res.getString(R.string.status, "UNLOCKED");
+        }
+        statusView.setText(text);
 
         setListeners();
 
+    }
+
+    private boolean getStatus(){
+        return true;
     }
 
 
@@ -79,6 +99,10 @@ public class ControlActivity extends AppCompatActivity {
                     }
                     outputStream.write(log.getBytes());
                     outputStream.close();
+
+                    Resources res = getResources();
+                    String text = res.getString(R.string.status, "UNLOCKED");
+                    statusView.setText(text);
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -106,6 +130,10 @@ public class ControlActivity extends AppCompatActivity {
 
                     outputStream.write(log.getBytes());
                     outputStream.close();
+
+                    Resources res = getResources();
+                    String text = res.getString(R.string.status, "LOCKED");
+                    statusView.setText(text);
 
                 } catch (Exception e) {
                     e.printStackTrace();

@@ -31,4 +31,9 @@
 
 
     <string name="log_file">History.txt</string>
+
+    <string name="status">Current Status: %1$s</string>
+    <string name="unlock">UNLOCK</string>
+    <string name="lock">LOCK</string>
+
 </resources>
