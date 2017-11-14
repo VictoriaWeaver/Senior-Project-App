@@ -42,6 +42,7 @@ public class ControlActivity extends AppCompatActivity {
     private String fileName;
     private TextView statusView;
     private boolean status;
+    private String piStatus;
 
 
     @Override
@@ -58,23 +59,27 @@ public class ControlActivity extends AppCompatActivity {
         lockBtn = (Button) findViewById(R.id.remote_lock_btn);
         statusView = (TextView) findViewById(R.id.status);
 
-        status = getStatus();
-
-        Resources res = getResources();
-        String text = "";
-        if(status){
-            text = res.getString(R.string.status, "LOCKED");
-        } else {
-            text = res.getString(R.string.status, "UNLOCKED");
-        }
-        statusView.setText(text);
+        getStatus();
 
         setListeners();
 
     }
 
-    private boolean getStatus(){
-        return true;
+    private void getStatus(){
+
+        Background_get asyncTask = new Background_get();
+
+        try{
+            String x = asyncTask.execute("status.txt").get();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+
+        Resources res = getResources();
+        String text = "";
+        text = res.getString(R.string.status, piStatus);
+        statusView.setText(text);
     }
 
 
@@ -100,9 +105,8 @@ public class ControlActivity extends AppCompatActivity {
                     outputStream.write(log.getBytes());
                     outputStream.close();
 
-                    Resources res = getResources();
-                    String text = res.getString(R.string.status, "UNLOCKED");
-                    statusView.setText(text);
+                    getStatus();
+
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -131,9 +135,7 @@ public class ControlActivity extends AppCompatActivity {
                     outputStream.write(log.getBytes());
                     outputStream.close();
 
-                    Resources res = getResources();
-                    String text = res.getString(R.string.status, "LOCKED");
-                    statusView.setText(text);
+                    getStatus();
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -163,23 +165,38 @@ public class ControlActivity extends AppCompatActivity {
         protected String doInBackground(String... params) {
             try {
 
-                //TODO set the IP address to the domain name on the RIT network
-                URL url = new URL("http://psr6237.student.rit.edu/home/" + params[0]);
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                if(params[0].equals("status.txt")) {
+                    URL url = new URL("http://psr6237.student.rit.edu/home/status.txt");
 
-                connection.connect();
+                    // Read all the text returned by the server
+                    BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
+                    String str;
+                    piStatus = "";
+                    while ((str = in.readLine()) != null) {
+                        // str is one line of text; readLine() strips the newline character(s)
+                        piStatus += str;
+                    }
+                    in.close();
 
-                BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                StringBuilder result = new StringBuilder();
-                String inputLine;
-                while ((inputLine = in.readLine()) != null)
-                    result.append(inputLine).append("\n");
 
-                in.close();
-                connection.disconnect();
+                }
+                else{
+                    URL url = new URL("http://psr6237.student.rit.edu/home/" + params[0]);
+                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
-                return result.toString();
+                    connection.connect();
 
+                    BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                    StringBuilder result = new StringBuilder();
+                    String inputLine;
+                    while ((inputLine = in.readLine()) != null)
+                        result.append(inputLine).append("\n");
+
+                    in.close();
+                    connection.disconnect();
+
+                    return result.toString();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
