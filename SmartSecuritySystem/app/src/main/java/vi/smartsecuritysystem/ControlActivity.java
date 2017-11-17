@@ -89,14 +89,13 @@ public class ControlActivity extends AppCompatActivity {
 
     }
 
-    private void getStatus(){
+    private void getStatus() {
 
         Background_get asyncTask = new Background_get();
 
-        try{
+        try {
             String x = asyncTask.execute("status.txt").get();
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -121,7 +120,7 @@ public class ControlActivity extends AppCompatActivity {
                     Log.w(TAG, log);
 
                     FileOutputStream outputStream;
-                    if(isFull()){
+                    if (isFull()) {
                         outputStream = openFileOutput(fileName, MODE_PRIVATE);
                     } else {
                         outputStream = openFileOutput(fileName, MODE_APPEND);
@@ -150,7 +149,7 @@ public class ControlActivity extends AppCompatActivity {
                     Log.w(TAG, log);
 
                     FileOutputStream outputStream;
-                    if(isFull()){
+                    if (isFull()) {
                         outputStream = openFileOutput(fileName, MODE_PRIVATE);
                     } else {
                         outputStream = openFileOutput(fileName, MODE_APPEND);
@@ -169,9 +168,9 @@ public class ControlActivity extends AppCompatActivity {
 
     }
 
-    private boolean isFull(){
+    private boolean isFull() {
         try (BufferedReader input = new BufferedReader(new InputStreamReader(
-                openFileInput(fileName))); ){
+                openFileInput(fileName)));) {
             String line;
             int count = 0;
             while ((line = input.readLine()) != null) {
@@ -189,7 +188,7 @@ public class ControlActivity extends AppCompatActivity {
         protected String doInBackground(String... params) {
             try {
 
-                if(params[0].equals("status.txt")) {
+                if (params[0].equals("status.txt")) {
                     URL url = new URL("http://psr6237.student.rit.edu/home/status.txt");
 
                     // Read all the text returned by the server
@@ -203,8 +202,14 @@ public class ControlActivity extends AppCompatActivity {
                     in.close();
 
 
-                }
-                else{
+                } else if (params[0].equals("history.txt")) {
+                    if (params[1].equals("")) {
+                        //append/overwrite logs
+                    } else {
+                        //read the logs
+                    }
+
+                } else {
                     URL url = new URL("http://psr6237.student.rit.edu/home/" + params[0]);
                     HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
@@ -224,7 +229,7 @@ public class ControlActivity extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-                                                                                                                                                                                                                                                    return null;
+            return null;
         }
     }
 

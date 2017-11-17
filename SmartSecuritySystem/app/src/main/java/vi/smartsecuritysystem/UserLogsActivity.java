@@ -1,5 +1,6 @@
 package vi.smartsecuritysystem;
 
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -9,13 +10,15 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 public class UserLogsActivity extends AppCompatActivity {
 
-    private String fileName;
     private ListView historyList;
     private ArrayList<String> logs = new ArrayList<String>();
 
@@ -26,8 +29,6 @@ public class UserLogsActivity extends AppCompatActivity {
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
-
-        fileName = getString(R.string.log_file);
 
         getHistory();
 
@@ -42,17 +43,51 @@ public class UserLogsActivity extends AppCompatActivity {
 
 
     private void getHistory(){
-        try (BufferedReader input = new BufferedReader(new InputStreamReader(
-                openFileInput(fileName))); ){
-            String line;
-            while ((line = input.readLine()) != null) {
-                logs.add(0, line);
-            }
-        } catch (Exception e) {
+//        try (BufferedReader input = new BufferedReader(new InputStreamReader(
+//                openFileInput(fileName))); ){
+//            String line;
+//            while ((line = input.readLine()) != null) {
+//                logs.add(0, line);
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+
+
+        UserLogsActivity.Background_get asyncTask = new UserLogsActivity.Background_get();
+
+        try{
+            String x = asyncTask.execute("history.txt").get();
+        }
+        catch (Exception e){
             e.printStackTrace();
         }
     }
 
+
+
+    private class Background_get extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+
+                URL url = new URL("http://psr6237.student.rit.edu/home/history.txt");
+
+                // Read all the text returned by the server
+                BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
+                String str;
+                while ((str = in.readLine()) != null) {
+                    // str is one line of text; readLine() strips the newline character(s)
+                    logs.add(0, str);
+                }
+                in.close();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
