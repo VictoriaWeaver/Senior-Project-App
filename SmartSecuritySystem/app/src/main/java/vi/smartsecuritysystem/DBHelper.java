@@ -43,14 +43,9 @@ public class DBHelper extends SQLiteOpenHelper {
         String CREATE_USERS_TABLE = "CREATE TABLE " + TABLE_USERS + " ("
                 + KEY_ID + " INTEGER PRIMARY KEY," + KEY_NAME + " TEXT,"
                 + KEY_ADMIN + " INTEGER," + KEY_FAMILY + " INTEGER," + KEY_EMAIL
-                + " TEXT UNIQUE," + KEY_PASSWORD + "TEXT" + ")";
+                + " TEXT UNIQUE," + KEY_PASSWORD + " TEXT" + ")";
         db.execSQL(CREATE_USERS_TABLE);
 
-        String saltedPassword = SALT + "password";
-        String hashedPassword = generateHash(saltedPassword);
-        User u = new User(1,"Admin",true,false,"Admin@gmail.com",hashedPassword);
-        User.nextid = 2;
-        this.addUser(u);
     }
 
     @Override
@@ -149,6 +144,18 @@ public class DBHelper extends SQLiteOpenHelper {
 
         // return contact list
         return userList;
+    }
+
+    public int getID(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String selectQuery = "SELECT MAX(id) FROM " + TABLE_USERS;
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor != null)
+            cursor.moveToFirst();
+
+        int id = cursor.getInt(0);
+        return id+1;
     }
 
     // Getting users Count

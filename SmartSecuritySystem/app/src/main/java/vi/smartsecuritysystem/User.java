@@ -6,8 +6,6 @@ package vi.smartsecuritysystem;
 
 public class User {
 
-    public static int nextid;
-
     private int _id;
     private String _name;
     private boolean _admin;
