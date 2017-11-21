@@ -13,13 +13,18 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -218,6 +223,9 @@ public class AddEditUserActivity extends AppCompatActivity {
                 DBHelper dbHelp = new DBHelper(getApplicationContext());
                 dbHelp.addUser(u);
 
+
+                new AddEditUserActivity.Background_get().execute("name="+nameEdit.getText().toString());
+
                 startActivity(new Intent(AddEditUserActivity.this, MainActivity.class));
             }
         });
@@ -283,5 +291,39 @@ public class AddEditUserActivity extends AppCompatActivity {
 
         return super.onCreateOptionsMenu(menu);
     }
+
+
+    private class Background_get extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+
+                URL url = new URL("http://psr6237.student.rit.edu/home/addUser/?" + params[0]);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+                connection.connect();
+
+                connection.disconnect();
+
+
+                url = new URL("http://psr6237.student.rit.edu/home/UserImages/" + params[0]);
+                connection = (HttpURLConnection) url.openConnection();
+
+                connection.connect();
+
+                //TODO copy the image to the folder
+
+                connection.disconnect();
+
+
+                return "";
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+    }
+
 }
 
