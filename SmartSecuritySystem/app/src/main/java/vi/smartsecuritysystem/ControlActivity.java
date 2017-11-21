@@ -43,7 +43,7 @@ public class ControlActivity extends AppCompatActivity {
     private TextView statusView;
     private boolean status;
     private String piStatus;
-
+    private String logAction="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,21 +112,15 @@ public class ControlActivity extends AppCompatActivity {
             public void onClick(View v) {
                 try {
                     //gpio high
-                    new Background_get().execute("unlock.php");
+                    ControlActivity.Background_get asyncTask = new ControlActivity.Background_get();
+                    String x = asyncTask.execute("unlock.php").get();
 
                     String currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
 
-                    String log = "<USER> UNLOCK " + currentDateTimeString + "\n";
-                    Log.w(TAG, log);
+                    logAction = "<USER> UNLOCK " + currentDateTimeString + "\n";
+                    Log.w(TAG, logAction);
 
-                    FileOutputStream outputStream;
-                    if (isFull()) {
-                        outputStream = openFileOutput(fileName, MODE_PRIVATE);
-                    } else {
-                        outputStream = openFileOutput(fileName, MODE_APPEND);
-                    }
-                    outputStream.write(log.getBytes());
-                    outputStream.close();
+//                    x = asyncTask.execute("history.txt").get();
 
                     getStatus();
 
@@ -141,22 +135,15 @@ public class ControlActivity extends AppCompatActivity {
             public void onClick(View v) {
                 try {
                     //gpio low
-                    new Background_get().execute("lock.php");
+                    ControlActivity.Background_get asyncTask = new ControlActivity.Background_get();
+                    String x = asyncTask.execute("lock.php").get();
 
                     String currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
 
-                    String log = "<USER> LOCK " + currentDateTimeString + "\n";
-                    Log.w(TAG, log);
+                    logAction = "<USER> LOCK " + currentDateTimeString + "\n";
+                    Log.w(TAG, logAction);
 
-                    FileOutputStream outputStream;
-                    if (isFull()) {
-                        outputStream = openFileOutput(fileName, MODE_PRIVATE);
-                    } else {
-                        outputStream = openFileOutput(fileName, MODE_APPEND);
-                    }
-
-                    outputStream.write(log.getBytes());
-                    outputStream.close();
+//                    x = asyncTask.execute("history.txt").get();
 
                     getStatus();
 
@@ -203,14 +190,26 @@ public class ControlActivity extends AppCompatActivity {
 
 
                 } else if (params[0].equals("history.txt")) {
-                    if (params[1].equals("")) {
-                        //append/overwrite logs
-                    } else {
-                        //read the logs
-                    }
+
+                    URL url = new URL("http://psr6237.student.rit.edu/home/log.php?name=USER");
+                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+                    connection.connect();
+
+                    BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                    StringBuilder result = new StringBuilder();
+                    String inputLine;
+                    while ((inputLine = in.readLine()) != null)
+                        result.append(inputLine).append("\n");
+
+                    in.close();
+                    connection.disconnect();
+
+                    return result.toString();
+
 
                 } else {
-                    URL url = new URL("http://psr6237.student.rit.edu/home/" + params[0]);
+                    URL url = new URL("http://psr6237.student.rit.edu/home/" + params[0] + "?name=USER");
                     HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
                     connection.connect();
