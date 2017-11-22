@@ -223,8 +223,12 @@ public class AddEditUserActivity extends AppCompatActivity {
                 DBHelper dbHelp = new DBHelper(getApplicationContext());
                 dbHelp.addUser(u);
 
-
-                new AddEditUserActivity.Background_get().execute("name="+nameEdit.getText().toString());
+                try{
+                    AddEditUserActivity.Background_get asyncTask = new AddEditUserActivity.Background_get();
+                    String x = asyncTask.execute("name="+nameEdit.getText().toString()).get();
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
 
                 startActivity(new Intent(AddEditUserActivity.this, MainActivity.class));
             }
@@ -302,16 +306,6 @@ public class AddEditUserActivity extends AppCompatActivity {
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
                 connection.connect();
-
-                connection.disconnect();
-
-
-                url = new URL("http://psr6237.student.rit.edu/home/UserImages/" + params[0]);
-                connection = (HttpURLConnection) url.openConnection();
-
-                connection.connect();
-
-                //TODO copy the image to the folder
 
                 connection.disconnect();
 
