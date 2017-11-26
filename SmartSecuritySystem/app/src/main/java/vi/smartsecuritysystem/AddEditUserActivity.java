@@ -15,6 +15,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -24,7 +25,9 @@ import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
@@ -69,6 +72,8 @@ public class AddEditUserActivity extends AppCompatActivity {
     private Switch adminSwitch;
 
     boolean userIsAdmin = true;
+    boolean edit;
+    String edit_email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +94,6 @@ public class AddEditUserActivity extends AppCompatActivity {
         accountExpDate = (EditText) findViewById(R.id.guest_account_expiration_date);
         doneBtn = (Button) findViewById(R.id.done_btn);
 
-        //
         if (!userIsAdmin) {
             adminSwitch.setEnabled(false);
         }
@@ -100,6 +104,27 @@ public class AddEditUserActivity extends AppCompatActivity {
             guestView.setVisibility(View.VISIBLE);
         } else {
             guestView.setVisibility(View.INVISIBLE);
+        }
+
+        Bundle extras = getIntent().getExtras();
+        if(extras==null) {
+            edit = false;
+        }
+        else{
+            edit = true;
+            String email = extras.getString("email");
+            if(email != null){
+                edit_email = email;
+                DBHelper dbHelp = new DBHelper(this);
+                User u =  dbHelp.getUser(email);
+                emailEdit.setText(email);
+                byte[] b = u.getImage();
+                Bitmap bitmap = BitmapFactory.decodeByteArray(b , 0, b.length);
+                profileImage.setImageBitmap(bitmap);
+                nameEdit.setText(u.getName());
+                adminSwitch.setChecked(u.isAdmin());
+                familySwitch.setChecked(u.isFamily());
+            }
         }
 
         setListeners();
@@ -224,10 +249,27 @@ public class AddEditUserActivity extends AppCompatActivity {
                     String saltedPassword = DBHelper.SALT + passwordEdit.getText().toString();
                     String hashedPassword = DBHelper.generateHash(saltedPassword);
                     DBHelper dbHelp = new DBHelper(getApplicationContext());
-                    int next_id = dbHelp.getID();
+
+                    int next_id;
+                    if(!edit) {
+                        next_id = dbHelp.getID();
+                    }
+                    else{
+                        next_id = dbHelp.getUser(edit_email).getID();
+                    }
+                    Bitmap bitmap = ((BitmapDrawable) profileImage.getDrawable()).getBitmap();
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                    byte[] imageInByte = baos.toByteArray();
+
                     User u = new User(next_id,nameEdit.getText().toString(),!familySwitch.getShowText(),adminSwitch.getShowText(),
-                            emailEdit.getText().toString(),hashedPassword);
-                    dbHelp.addUser(u);
+                            emailEdit.getText().toString(),hashedPassword, imageInByte);
+                    if(!edit) {
+                        dbHelp.addUser(u);
+                    }
+                    else{
+                        dbHelp.updateUser(u);
+                    }
 
                     try {
                         String sanitized = URLEncoder.encode(nameEdit.getText().toString(), "UTF-8");

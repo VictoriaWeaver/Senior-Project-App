@@ -48,24 +48,20 @@ public class GuestAccountsActivity extends AppCompatActivity {
         DBHelper dbHelp = new DBHelper(this);
         List<User> lst =  dbHelp.getAllUsers();
 
-        List<String> usernames = new ArrayList<String>();
+        List<User> users = new ArrayList<User>();
 
         for(User u : lst){
             if(!u.isFamily()) {
-                usernames.add(u.getName());
+                users.add(u);
             }
         }
-
-        // Temporary list in while DB is in development
-        usernames.add("Bob");
-
 
         userRecyclerView.setHasFixedSize(true);
 
         userLayoutManager = new LinearLayoutManager(this);
         userRecyclerView.setLayoutManager(userLayoutManager);
 
-        userAdapter = new UserAdapter(GuestAccountsActivity.this, usernames);
+        userAdapter = new UserAdapter(GuestAccountsActivity.this, users);
         userRecyclerView.setAdapter(userAdapter);
 
     }

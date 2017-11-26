@@ -53,11 +53,11 @@ public class FamilyAccountsActivity extends AppCompatActivity {
 
         List<User> lst =  dbHelp.getAllUsers();
 
-        List<String> usernames = new ArrayList<String>();
+        List<User> users = new ArrayList<User>();
 
         for(User u : lst){
             if(u.isFamily()) {
-                usernames.add(u.getName());
+                users.add(u);
             }
         }
 
@@ -66,7 +66,7 @@ public class FamilyAccountsActivity extends AppCompatActivity {
         userLayoutManager = new LinearLayoutManager(this);
         userRecyclerView.setLayoutManager(userLayoutManager);
 
-        userAdapter = new UserAdapter(FamilyAccountsActivity.this, usernames);
+        userAdapter = new UserAdapter(FamilyAccountsActivity.this, users);
         userRecyclerView.setAdapter(userAdapter);
 
     }

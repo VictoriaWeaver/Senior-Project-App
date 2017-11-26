@@ -26,6 +26,15 @@ public class MainActivity extends AppCompatActivity {
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
 
+        Bundle extras = getIntent().getExtras();
+        if(extras!=null) {
+            String email = extras.getString("email");
+            if(email != null){
+                DBHelper dbHelp = new DBHelper(this);
+                dbHelp.deleteUser(email);
+            }
+        }
+
         setupButtons();
 
     }

@@ -5,8 +5,14 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.media.Image;
 import android.provider.BaseColumns;
+import android.widget.ImageView;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.security.MessageDigest;
@@ -18,7 +24,7 @@ import java.security.NoSuchAlgorithmException;
 
 public class DBHelper extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     private static final String DATABASE_NAME = "usersManager.db";
     private static final String TABLE_USERS = "users";
@@ -29,6 +35,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String KEY_FAMILY = "family";
     private static final String KEY_EMAIL = "email";
     private static final String KEY_PASSWORD = "password";
+    private static final String KEY_IMAGE = "image";
 
     public static final String SALT = "my-salt-text";
 
@@ -43,7 +50,7 @@ public class DBHelper extends SQLiteOpenHelper {
         String CREATE_USERS_TABLE = "CREATE TABLE " + TABLE_USERS + " ("
                 + KEY_ID + " INTEGER PRIMARY KEY," + KEY_NAME + " TEXT,"
                 + KEY_ADMIN + " INTEGER," + KEY_FAMILY + " INTEGER," + KEY_EMAIL
-                + " TEXT UNIQUE," + KEY_PASSWORD + " TEXT" + ")";
+                + " TEXT UNIQUE," + KEY_PASSWORD + " TEXT," + KEY_IMAGE + " BLOB)";
         db.execSQL(CREATE_USERS_TABLE);
 
     }
@@ -79,6 +86,8 @@ public class DBHelper extends SQLiteOpenHelper {
         }
         values.put(KEY_EMAIL,user.getEmail());
         values.put(KEY_PASSWORD,user.getPassword());
+        values.put(KEY_IMAGE,user.getImage());
+
         long rowID = db.insert(TABLE_USERS, null, values);
         //db.close(); // Closing database connection
     }
@@ -87,7 +96,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public User getUser(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(TABLE_USERS, new String[]{KEY_ID, KEY_NAME, KEY_ADMIN,
-                KEY_FAMILY,KEY_EMAIL,KEY_PASSWORD}, KEY_ID + "=?", new String[]{String.valueOf(id)}, null, null, null, null);
+                KEY_FAMILY,KEY_EMAIL,KEY_PASSWORD,KEY_IMAGE}, KEY_ID + "=?", new String[]{String.valueOf(id)}, null, null, null, null);
 
         if (cursor != null)
             cursor.moveToFirst();
@@ -96,7 +105,7 @@ public class DBHelper extends SQLiteOpenHelper {
         boolean family = (cursor.getInt(3) != 0);
 
         User user = new User(Integer.parseInt(cursor.getString(0)),
-                cursor.getString(1), admin, family, cursor.getString(4),cursor.getString(5));
+                cursor.getString(1), admin, family, cursor.getString(4),cursor.getString(5),cursor.getBlob(6));
         // return user
         return user;
     }
@@ -113,7 +122,7 @@ public class DBHelper extends SQLiteOpenHelper {
         boolean family = (cursor.getInt(3) != 0);
 
         User user = new User(Integer.parseInt(cursor.getString(0)),
-                cursor.getString(1), admin, family, cursor.getString(4),cursor.getString(5));
+                cursor.getString(1), admin, family, cursor.getString(4),cursor.getString(5),cursor.getBlob(6));
         // return user
         return user;
     }
@@ -137,6 +146,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 user.setFamily(Integer.parseInt(cursor.getString(3)) != 0);
                 user.setEmail(cursor.getString(4));
                 user.setPassword(cursor.getString(5));
+                user.setImage(cursor.getBlob(6));
                 // Adding contact to list
                 userList.add(user);
             } while (cursor.moveToNext());
@@ -170,29 +180,42 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     // Updating single user
-    public int updateUser(User user) {
+    public long updateUser(User user) {
         // Updating single user
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
         //might need to put ID in values too
         values.put(KEY_NAME, user.getName());
-        values.put(KEY_ADMIN, user.isAdmin());
-        values.put(KEY_FAMILY, user.isFamily());
+        if(user.isAdmin()==false) {
+            values.put(KEY_ADMIN, 0); // Is Admin
+        }
+        else{
+            values.put(KEY_ADMIN, 1); // Is Admin
+        }
+        if(user.isFamily()==false) {
+            values.put(KEY_FAMILY, 0); // Is Admin
+        }
+        else{
+            values.put(KEY_FAMILY, 1); // Is Admin
+        }
         values.put(KEY_EMAIL, user.getEmail());
         values.put(KEY_PASSWORD, user.getPassword());
+        values.put(KEY_IMAGE, user.getImage());
 
         // updating row
-        return db.update(TABLE_USERS, values, KEY_ID + " = ?",
+        long rowID =  db.update(TABLE_USERS, values, KEY_ID + " = ?",
                 new String[]{String.valueOf(user.getID())});
+
+        return rowID;
     }
 
     // Deleting single user
-    public void deleteUser(User user) {
+    public void deleteUser(String email) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_USERS, KEY_ID + " = ?",
-                new String[] { String.valueOf(user.getID()) });
-        db.close();
+        db.delete(TABLE_USERS, KEY_EMAIL + " = ?",
+                new String[] { String.valueOf(email) });
+        //db.close();
     }
 
     public boolean emailExists(String email){

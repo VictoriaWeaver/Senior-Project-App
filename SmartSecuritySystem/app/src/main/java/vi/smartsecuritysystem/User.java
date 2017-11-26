@@ -1,5 +1,7 @@
 package vi.smartsecuritysystem;
 
+import android.widget.ImageView;
+
 /**
  * Created by victoria on 9/7/2017.
  */
@@ -12,6 +14,7 @@ public class User {
     private boolean _family;
     private String _email;
     private String _password;
+    private byte[] _image;
 
     public User(){
         this._id = 0;
@@ -22,13 +25,15 @@ public class User {
         this._password = "null";
     }
 
-    public User(int id, String name, boolean family, boolean admin, String email, String password) {
+    public User(int id, String name, boolean family, boolean admin, String email, String password, byte[] image) {
         this._id = id;
         this._name = name;
         this._admin = admin;
         this._family = family;
         this._email = email;
         this._password = password;
+        this._image = image;
+
     }
 
     public User(String name, boolean family, boolean admin, String email, String password) {
@@ -46,6 +51,8 @@ public class User {
     public String getName(){
         return this._name;
     }
+
+    public byte[] getImage() { return this._image; }
 
     public boolean isAdmin(){
         return this._admin;
@@ -82,5 +89,7 @@ public class User {
     public void setPassword(String password){
         this._password = password;
     }
+
+    public void setImage(byte[] b){ this._image = b; }
 
 }
