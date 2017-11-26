@@ -1,5 +1,6 @@
 package vi.smartsecuritysystem;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -201,9 +202,8 @@ public class ControlActivity extends AppCompatActivity {
                 // User chose the "Settings" item, show the app settings UI...
                 return true;
 
-            case R.id.action_favorite:
-                // User chose the "Favorite" action, mark the current item
-                // as a favorite...
+            case R.id.action_logout:
+                startActivity(new Intent(ControlActivity.this, LoginActivity.class));
                 return true;
 
             default:

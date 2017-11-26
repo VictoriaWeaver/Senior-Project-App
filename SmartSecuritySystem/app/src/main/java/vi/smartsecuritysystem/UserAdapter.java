@@ -1,12 +1,16 @@
 package vi.smartsecuritysystem;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.res.Resources;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.TextUtils;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -57,11 +61,29 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.CustomViewHold
     class CustomViewHolder extends RecyclerView.ViewHolder {
         protected ImageView imageView;
         protected TextView textView;
+        protected Button editBtn;
+        protected Button deleteBtn;
 
         public CustomViewHolder(View view) {
             super(view);
             this.imageView = (ImageView) view.findViewById(R.id.thumbnail);
             this.textView = (TextView) view.findViewById(R.id.title);
+            this.deleteBtn = (Button) view.findViewById(R.id.delete_user);
+            this.editBtn = (Button) view.findViewById(R.id.edit_user);
+
+            this.editBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    v.getContext().startActivity(new Intent(v.getContext(), MainActivity.class));
+                }
+            });
+
+            this.deleteBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    v.getContext().startActivity(new Intent(v.getContext(), UserLogsActivity.class));
+                }
+            });
         }
     }
 }

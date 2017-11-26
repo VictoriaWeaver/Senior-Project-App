@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -13,13 +14,19 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -210,18 +217,57 @@ public class AddEditUserActivity extends AppCompatActivity {
 
         doneBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                String saltedPassword = DBHelper.SALT + passwordEdit.getText().toString();
-                String hashedPassword = DBHelper.generateHash(saltedPassword);
-                DBHelper dbHelp = new DBHelper(getApplicationContext());
-                int next_id = dbHelp.getID();
-                User u = new User(next_id,nameEdit.getText().toString(),!familySwitch.getShowText(),adminSwitch.getShowText(),
-                    emailEdit.getText().toString(),hashedPassword);
-                dbHelp.addUser(u);
+                //TODO check if fields are valid
+                int status = isValidUser();
+                if (status == 0) {
 
-                startActivity(new Intent(AddEditUserActivity.this, MainActivity.class));
+                    String saltedPassword = DBHelper.SALT + passwordEdit.getText().toString();
+                    String hashedPassword = DBHelper.generateHash(saltedPassword);
+                    DBHelper dbHelp = new DBHelper(getApplicationContext());
+                    int next_id = dbHelp.getID();
+                    User u = new User(next_id,nameEdit.getText().toString(),!familySwitch.getShowText(),adminSwitch.getShowText(),
+                            emailEdit.getText().toString(),hashedPassword);
+                    dbHelp.addUser(u);
+
+                    try {
+                        String sanitized = URLEncoder.encode(nameEdit.getText().toString(), "UTF-8");
+                        AddEditUserActivity.Background_get asyncTask = new AddEditUserActivity.Background_get();
+                        String x = asyncTask.execute("name=" + sanitized).get();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    startActivity(new Intent(AddEditUserActivity.this, MainActivity.class));
+                }
+                else if(status == 1) {
+                    Context context = getApplicationContext();
+                    CharSequence text = "Please complete all fields";
+                    int duration = Toast.LENGTH_LONG;
+
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();
+                }
+                else {
+                    Context context = getApplicationContext();
+                    CharSequence text = "Please enter a valid email address";
+                    int duration = Toast.LENGTH_LONG;
+
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();
+                }
             }
         });
 
+    }
+
+    private int isValidUser() {
+        if (nameEdit.getText().toString().isEmpty() || passwordEdit.getText().toString().isEmpty() || emailEdit.getText().toString().isEmpty()){
+            return 1;
+        }
+        if(!emailEdit.getText().toString().contains("@")){
+            return -1;
+        }
+        return 0;
     }
 
 
@@ -263,9 +309,8 @@ public class AddEditUserActivity extends AppCompatActivity {
                 // User chose the "Settings" item, show the app settings UI...
                 return true;
 
-            case R.id.action_favorite:
-                // User chose the "Favorite" action, mark the current item
-                // as a favorite...
+            case R.id.action_logout:
+                startActivity(new Intent(AddEditUserActivity.this, LoginActivity.class));
                 return true;
 
             default:
@@ -283,5 +328,29 @@ public class AddEditUserActivity extends AppCompatActivity {
 
         return super.onCreateOptionsMenu(menu);
     }
+
+
+    private class Background_get extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+
+                URL url = new URL("http://psr6237.student.rit.edu/home/addUser/?" + params[0]);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+                connection.connect();
+
+                connection.disconnect();
+
+
+                return "";
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+    }
+
 }
 
