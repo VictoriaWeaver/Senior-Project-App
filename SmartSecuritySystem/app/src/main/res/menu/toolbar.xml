@@ -4,14 +4,14 @@
 
     <!-- "Mark Favorite", should appear as action button if possible -->
     <item
-        android:id="@+id/action_favorite"
+        android:id="@+id/action_logout"
         android:icon="@mipmap/ic_favorite_black_48dp"
-        android:title="action favorite"
+        android:title="Logout"
         app:showAsAction="never"/>
 
     <!-- Settings, should always be in the overflow -->
     <item android:id="@+id/action_settings"
-        android:title="action settings"
+        android:title="Settings"
         app:showAsAction="never"/>
 
 </menu>

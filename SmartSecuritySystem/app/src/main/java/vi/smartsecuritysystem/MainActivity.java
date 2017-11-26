@@ -67,9 +67,8 @@ public class MainActivity extends AppCompatActivity {
                 // User chose the "Settings" item, show the app settings UI...
                 return true;
 
-            case R.id.action_favorite:
-                // User chose the "Favorite" action, mark the current item
-                // as a favorite...
+            case R.id.action_logout:
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
                 return true;
 
             default:
