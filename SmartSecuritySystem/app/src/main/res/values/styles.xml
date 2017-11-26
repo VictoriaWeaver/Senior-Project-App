@@ -17,9 +17,9 @@
 
     <style name="AppThemeGuest" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/guestPrimary</item>
-        <item name="colorPrimaryDark">@color/guestPrimaryDark</item>
-        <item name="colorAccent">@color/guestPrimaryLight</item>
+        <item name="colorPrimary">@color/familyPrimary</item>
+        <item name="colorPrimaryDark">@color/familyPrimaryDark</item>
+        <item name="colorAccent">@color/familyPrimaryLight</item>
     </style>
 
     <style name="AppThemeControl" parent="Theme.AppCompat.Light.NoActionBar">
@@ -29,12 +29,12 @@
         <item name="colorAccent">@color/controlPrimaryLight</item>
     </style>
 
-    <style name="AppThemeCamera" parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/cameraPrimary</item>
-        <item name="colorPrimaryDark">@color/cameraPrimaryDark</item>
-        <item name="colorAccent">@color/cameraPrimaryLight</item>
-    </style>
+    <!--<style name="AppThemeCamera" parent="Theme.AppCompat.Light.NoActionBar">-->
+        <!--&lt;!&ndash; Customize your theme here. &ndash;&gt;-->
+        <!--<item name="colorPrimary">@color/cameraPrimary</item>-->
+        <!--<item name="colorPrimaryDark">@color/cameraPrimaryDark</item>-->
+        <!--<item name="colorAccent">@color/cameraPrimaryLight</item>-->
+    <!--</style>-->
 
     <style name="AppThemeLogs" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->

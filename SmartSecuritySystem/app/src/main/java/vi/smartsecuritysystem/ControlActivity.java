@@ -1,5 +1,6 @@
 package vi.smartsecuritysystem;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
