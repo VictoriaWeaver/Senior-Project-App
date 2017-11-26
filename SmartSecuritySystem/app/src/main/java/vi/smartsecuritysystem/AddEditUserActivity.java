@@ -212,10 +212,10 @@ public class AddEditUserActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String saltedPassword = DBHelper.SALT + passwordEdit.getText().toString();
                 String hashedPassword = DBHelper.generateHash(saltedPassword);
-                User u = new User(User.nextid,nameEdit.getText().toString(),!familySwitch.getShowText(),adminSwitch.getShowText(),
-                    emailEdit.getText().toString(),hashedPassword);
-                User.nextid++;
                 DBHelper dbHelp = new DBHelper(getApplicationContext());
+                int next_id = dbHelp.getID();
+                User u = new User(next_id,nameEdit.getText().toString(),!familySwitch.getShowText(),adminSwitch.getShowText(),
+                    emailEdit.getText().toString(),hashedPassword);
                 dbHelp.addUser(u);
 
                 startActivity(new Intent(AddEditUserActivity.this, MainActivity.class));
