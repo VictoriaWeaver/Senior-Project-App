@@ -18,6 +18,7 @@ import android.graphics.BitmapFactory;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -277,7 +278,8 @@ public class AddEditUserActivity extends AppCompatActivity {
                     }
 
                     try {
-                        String sanitized = URLEncoder.encode(nameEdit.getText().toString(), "UTF-8");
+
+                        String sanitized = nameEdit.getText().toString().replaceAll(" ", "_");
                         AddEditUserActivity.Background_get asyncTask = new AddEditUserActivity.Background_get();
                         String x = asyncTask.execute("name=" + sanitized).get();
 
@@ -389,30 +391,20 @@ public class AddEditUserActivity extends AppCompatActivity {
     private class Background_get extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... params) {
+
             if (params[0].contains("name=")) {
                 try {
-                    URL url = new URL(domain + "addUser.php/?" + params[0]);
+
+                    URL url = new URL(domain + "UserImages/addUser.php?" + params[0]);
                     HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-
-
-                    return "";
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                try {
-
-
-                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                    byte[] imageInByte = baos.toByteArray();
-
-                    URL url = new URL(domain + "UserImages/" + params[0]);
-                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-
                     connection.connect();
+                    BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                    StringBuilder result = new StringBuilder();
+                    String inputLine;
+                    while ((inputLine = in.readLine()) != null)
+                        result.append(inputLine).append("\n");
 
+                    in.close();
                     connection.disconnect();
 
                     return "";
@@ -421,6 +413,28 @@ public class AddEditUserActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
+//            } else {
+//                try {
+//                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+//                    byte[] imageInByte = baos.toByteArray();
+//
+//                    URL url = new URL(domain + "UserImages/" + params[0] + "/" + params[0] + ".jpg");
+//                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+//
+//                    connection.connect();
+//                    connection.disconnect();
+//
+////                    DataOutputStream  out = new DataOutputStream(connection.getOutputStream());
+////                    out.write(imageInByte);
+////                    out.close();
+//
+//                    return "";
+//
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
             return null;
         }
     }

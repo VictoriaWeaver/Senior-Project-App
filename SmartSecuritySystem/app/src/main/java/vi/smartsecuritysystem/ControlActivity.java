@@ -150,20 +150,20 @@ public class ControlActivity extends AppCompatActivity {
 
     }
 
-    private boolean isFull() {
-        try (BufferedReader input = new BufferedReader(new InputStreamReader(
-                openFileInput("history.txt")));) {
-            String line;
-            int count = 0;
-            while ((line = input.readLine()) != null) {
-                count++;
-            }
-            return (count >= maxLines);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return true;
-    }
+//    private boolean isFull() {
+//        try (BufferedReader input = new BufferedReader(new InputStreamReader(
+//                openFileInput("history.txt")));) {
+//            String line;
+//            int count = 0;
+//            while ((line = input.readLine()) != null) {
+//                count++;
+//            }
+//            return (count >= maxLines);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return true;
+//    }
 
     private class Background_get extends AsyncTask<String, Void, String> {
         @Override
