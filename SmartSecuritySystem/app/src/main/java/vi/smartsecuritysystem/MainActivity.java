@@ -30,8 +30,8 @@ public class MainActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if(extras!=null) {
             email = extras.getString("emailUser");
-            String delEmail = extras.getString("emailDel");
             if(extras.getBoolean("delete")){
+                String delEmail = extras.getString("emailDel");
                 DBHelper dbHelp = new DBHelper(this);
                 dbHelp.deleteUser(delEmail);
             }

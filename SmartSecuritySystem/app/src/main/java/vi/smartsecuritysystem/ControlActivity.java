@@ -48,7 +48,7 @@ public class ControlActivity extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
         if(extras!=null) {
-            String email = extras.getString("email");
+            String email = extras.getString("emailUser");
             if(email != null){
                 DBHelper dbHelp = new DBHelper(this);
                 user = dbHelp.getUser(email);

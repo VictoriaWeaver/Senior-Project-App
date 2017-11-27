@@ -360,7 +360,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 finish();
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putString("email", mEmail);
+                bundle.putString("emailUser", mEmail);
                 intent.putExtras(bundle);
                 startActivity(intent);
 
