@@ -412,29 +412,26 @@ public class AddEditUserActivity extends AppCompatActivity {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+            } else {
+                try {
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                    byte[] imageInByte = baos.toByteArray();
+
+                    URL url = new URL(domain + "UserImages/" + params[0] + "/" + params[0] + ".jpg");
+                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+                    //TODO: copy image into user.jpg
+//                    DataOutputStream  out = new DataOutputStream(connection.getOutputStream());
+//                    out.write(imageInByte);
+//                    out.close();
+
+                    return "";
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
-//            } else {
-//                try {
-//                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-//                    byte[] imageInByte = baos.toByteArray();
-//
-//                    URL url = new URL(domain + "UserImages/" + params[0] + "/" + params[0] + ".jpg");
-//                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-//
-//                    connection.connect();
-//                    connection.disconnect();
-//
-////                    DataOutputStream  out = new DataOutputStream(connection.getOutputStream());
-////                    out.write(imageInByte);
-////                    out.close();
-//
-//                    return "";
-//
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
             return null;
         }
     }
