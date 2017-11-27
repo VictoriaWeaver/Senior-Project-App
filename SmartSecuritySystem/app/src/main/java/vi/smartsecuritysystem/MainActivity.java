@@ -17,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
     private Button guestAccountsBtn;
     private Button controlBtn;
     private Button userLogsBtn;
+    private String email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,11 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
         if(extras!=null) {
-            String email = extras.getString("email");
-            if(email != null){
-                DBHelper dbHelp = new DBHelper(this);
-                dbHelp.deleteUser(email);
-            }
+            email = extras.getString("email");
         }
 
         setupButtons();
@@ -47,23 +44,39 @@ public class MainActivity extends AppCompatActivity {
 
         familyAccountsBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, FamilyAccountsActivity.class));
+                Intent intent = new Intent(MainActivity.this, FamilyAccountsActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("email", email);
+                intent.putExtras(bundle);
+                startActivity(intent);
             }
         });
         guestAccountsBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, GuestAccountsActivity.class));
+                Intent intent = new Intent(MainActivity.this, GuestAccountsActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("email", email);
+                intent.putExtras(bundle);
+                startActivity(intent);
             }
         });
 
         controlBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, ControlActivity.class));
+                Intent intent = new Intent(MainActivity.this, ControlActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("email", email);
+                intent.putExtras(bundle);
+                startActivity(intent);
             }
         });
         userLogsBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, UserLogsActivity.class));
+                Intent intent = new Intent(MainActivity.this, UserLogsActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("email", email);
+                intent.putExtras(bundle);
+                startActivity(intent);
             }
         });
 

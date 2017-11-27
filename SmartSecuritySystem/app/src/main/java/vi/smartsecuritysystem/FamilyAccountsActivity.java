@@ -26,6 +26,7 @@ public class FamilyAccountsActivity extends AppCompatActivity {
     private RecyclerView userRecyclerView;
     private RecyclerView.Adapter userAdapter;
     private RecyclerView.LayoutManager userLayoutManager;
+    private String email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +45,12 @@ public class FamilyAccountsActivity extends AppCompatActivity {
 
         userRecyclerView = (RecyclerView) findViewById(R.id.family_accounts_list);
         displayUsers(userRecyclerView);
+
+        Bundle extras = getIntent().getExtras();
+        if(extras!=null) {
+            email = extras.getString("email");
+        }
+
     }
 
 

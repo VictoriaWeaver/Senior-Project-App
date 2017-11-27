@@ -15,10 +15,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -70,6 +72,7 @@ public class AddEditUserActivity extends AppCompatActivity {
     private boolean guestFlag = false;
     private Switch familySwitch;
     private Switch adminSwitch;
+    private Bitmap bitmap;
 
     boolean userIsAdmin = true;
     boolean edit;
@@ -107,19 +110,18 @@ public class AddEditUserActivity extends AppCompatActivity {
         }
 
         Bundle extras = getIntent().getExtras();
-        if(extras==null) {
+        if (extras == null) {
             edit = false;
-        }
-        else{
+        } else {
             edit = true;
             String email = extras.getString("email");
-            if(email != null){
+            if (email != null) {
                 edit_email = email;
                 DBHelper dbHelp = new DBHelper(this);
-                User u =  dbHelp.getUser(email);
+                User u = dbHelp.getUser(email);
                 emailEdit.setText(email);
                 byte[] b = u.getImage();
-                Bitmap bitmap = BitmapFactory.decodeByteArray(b , 0, b.length);
+                Bitmap bitmap = BitmapFactory.decodeByteArray(b, 0, b.length);
                 profileImage.setImageBitmap(bitmap);
                 nameEdit.setText(u.getName());
                 adminSwitch.setChecked(u.isAdmin());
@@ -251,23 +253,21 @@ public class AddEditUserActivity extends AppCompatActivity {
                     DBHelper dbHelp = new DBHelper(getApplicationContext());
 
                     int next_id;
-                    if(!edit) {
+                    if (!edit) {
                         next_id = dbHelp.getID();
-                    }
-                    else{
+                    } else {
                         next_id = dbHelp.getUser(edit_email).getID();
                     }
-                    Bitmap bitmap = ((BitmapDrawable) profileImage.getDrawable()).getBitmap();
+                    bitmap = ((BitmapDrawable) profileImage.getDrawable()).getBitmap();
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                     byte[] imageInByte = baos.toByteArray();
 
-                    User u = new User(next_id,nameEdit.getText().toString(),!familySwitch.getShowText(),adminSwitch.getShowText(),
-                            emailEdit.getText().toString(),hashedPassword, imageInByte);
-                    if(!edit) {
+                    User u = new User(next_id, nameEdit.getText().toString(), !familySwitch.getShowText(), adminSwitch.getShowText(),
+                            emailEdit.getText().toString(), hashedPassword, imageInByte);
+                    if (!edit) {
                         dbHelp.addUser(u);
-                    }
-                    else{
+                    } else {
                         dbHelp.updateUser(u);
                     }
 
@@ -275,21 +275,25 @@ public class AddEditUserActivity extends AppCompatActivity {
                         String sanitized = URLEncoder.encode(nameEdit.getText().toString(), "UTF-8");
                         AddEditUserActivity.Background_get asyncTask = new AddEditUserActivity.Background_get();
                         String x = asyncTask.execute("name=" + sanitized).get();
+
+                        //transfer imageInByte to rpi3
+                        bitmap = ((BitmapDrawable) profileImage.getDrawable()).getBitmap();
+                        asyncTask = new AddEditUserActivity.Background_get();
+                        x = asyncTask.execute(sanitized).get();
+
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
 
                     startActivity(new Intent(AddEditUserActivity.this, MainActivity.class));
-                }
-                else if(status == 1) {
+                } else if (status == 1) {
                     Context context = getApplicationContext();
                     CharSequence text = "Please complete all fields";
                     int duration = Toast.LENGTH_LONG;
 
                     Toast toast = Toast.makeText(context, text, duration);
                     toast.show();
-                }
-                else {
+                } else {
                     Context context = getApplicationContext();
                     CharSequence text = "Please enter a valid email address";
                     int duration = Toast.LENGTH_LONG;
@@ -303,10 +307,10 @@ public class AddEditUserActivity extends AppCompatActivity {
     }
 
     private int isValidUser() {
-        if (nameEdit.getText().toString().isEmpty() || passwordEdit.getText().toString().isEmpty() || emailEdit.getText().toString().isEmpty()){
+        if (nameEdit.getText().toString().isEmpty() || passwordEdit.getText().toString().isEmpty() || emailEdit.getText().toString().isEmpty()) {
             return 1;
         }
-        if(!emailEdit.getText().toString().contains("@")){
+        if (!emailEdit.getText().toString().contains("@")) {
             return -1;
         }
         return 0;
@@ -375,20 +379,37 @@ public class AddEditUserActivity extends AppCompatActivity {
     private class Background_get extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... params) {
-            try {
-
-                URL url = new URL("http://psr6237.student.rit.edu/home/addUser/?" + params[0]);
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-
-                connection.connect();
-
-                connection.disconnect();
+            if (params[0].contains("name=")) {
+                try {
+                    URL url = new URL("http://psr6237.student.rit.edu/home/addUser/?" + params[0]);
+                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
 
-                return "";
+                    return "";
 
-            } catch (IOException e) {
-                e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                try {
+
+
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                    byte[] imageInByte = baos.toByteArray();
+
+                    URL url = new URL("http://psr6237.student.rit.edu/home/addUser/" + params[0]);
+                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+                    connection.connect();
+
+                    connection.disconnect();
+
+                    return "";
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
             return null;
         }

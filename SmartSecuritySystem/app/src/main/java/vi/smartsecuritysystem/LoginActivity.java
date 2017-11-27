@@ -62,6 +62,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+    private User mUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -173,7 +174,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         // Check for a valid password, if the user entered one.
         if (!isPasswordValid(email,password)){ //&& !TextUtils.isEmpty(password)) {
-            mPasswordView.setError(getString(R.string.error_invalid_password));
+            mPasswordView.setError(getString(R.string.error_incorrect_password));
             focusView = mPasswordView;
             cancel = true;
         }
@@ -186,6 +187,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
+
+            DBHelper dbHelp = new DBHelper(this);
+            mUser = dbHelp.getUser(email);
             mAuthTask = new UserLoginTask(email, password);
             mAuthTask.execute((Void) null);
         }
@@ -354,7 +358,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             if (success) {
                 finish();
-                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("email", mEmail);
+                intent.putExtras(bundle);
+                startActivity(intent);
+
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
