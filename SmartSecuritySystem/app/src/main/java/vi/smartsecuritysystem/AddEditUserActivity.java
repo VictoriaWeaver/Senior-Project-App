@@ -412,8 +412,9 @@ public class AddEditUserActivity extends AppCompatActivity {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            } else {
-                try {
+            }
+//            else {
+//                try {
 //                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
 //                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
 //                    byte[] imageInByte = baos.toByteArray();
@@ -428,10 +429,10 @@ public class AddEditUserActivity extends AppCompatActivity {
 //
 //                    return "";
 
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
             return null;
         }
     }
