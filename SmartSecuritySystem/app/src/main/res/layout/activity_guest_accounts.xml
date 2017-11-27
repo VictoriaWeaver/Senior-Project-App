@@ -36,7 +36,7 @@
             android:layout_gravity="bottom|right"
             android:layout_margin="16dp"
             android:src="@mipmap/ic_add"
-            app:backgroundTint="@color/guestPrimaryDark"
+            app:backgroundTint="@color/familyPrimaryDark"
             app:layout_anchor="@id/guest_accounts_list"
             app:layout_anchorGravity="bottom|right|end" />
 

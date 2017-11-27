@@ -29,7 +29,12 @@ public class MainActivity extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
         if(extras!=null) {
-            email = extras.getString("email");
+            email = extras.getString("emailUser");
+            String delEmail = extras.getString("emailDel");
+            if(extras.getBoolean("delete")){
+                DBHelper dbHelp = new DBHelper(this);
+                dbHelp.deleteUser(delEmail);
+            }
         }
 
         setupButtons();
@@ -46,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, FamilyAccountsActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putString("email", email);
+                bundle.putString("emailUser", email);
                 intent.putExtras(bundle);
                 startActivity(intent);
             }
@@ -55,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, GuestAccountsActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putString("email", email);
+                bundle.putString("emailUser", email);
                 intent.putExtras(bundle);
                 startActivity(intent);
             }
@@ -65,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, ControlActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putString("email", email);
+                bundle.putString("emailUser", email);
                 intent.putExtras(bundle);
                 startActivity(intent);
             }
@@ -74,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, UserLogsActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putString("email", email);
+                bundle.putString("emailUser", email);
                 intent.putExtras(bundle);
                 startActivity(intent);
             }

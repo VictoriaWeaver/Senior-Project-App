@@ -1,6 +1,7 @@
 package vi.smartsecuritysystem;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -22,6 +23,8 @@ public class UserLogsActivity extends AppCompatActivity {
 
     private ListView historyList;
     private ArrayList<String> logs = new ArrayList<String>();
+    private String domain;
+    private String user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +33,11 @@ public class UserLogsActivity extends AppCompatActivity {
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
+
+        Resources res = getResources();
+        domain = res.getString(R.string.domain);
+
+        user = getIntent().getStringExtra("emailUser");
 
         getHistory();
 
@@ -72,7 +80,7 @@ public class UserLogsActivity extends AppCompatActivity {
         protected String doInBackground(String... params) {
             try {
 
-                URL url = new URL("http://psr6237.student.rit.edu/home/history.txt");
+                URL url = new URL(domain + "history.txt");
 
                 // Read all the text returned by the server
                 BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));

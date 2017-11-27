@@ -32,6 +32,7 @@ public class ControlActivity extends AppCompatActivity {
     private String piStatus;
     private String logAction = "";
     private User user;
+    private String domain;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +54,9 @@ public class ControlActivity extends AppCompatActivity {
                 user = dbHelp.getUser(email);
             }
         }
+
+        Resources res = getResources();
+        domain = res.getString(R.string.domain);
 
         getStatus();
 
@@ -167,7 +171,7 @@ public class ControlActivity extends AppCompatActivity {
             try {
 
                 if (params[0].equals("status.txt")) {
-                    URL url = new URL("http://psr6237.student.rit.edu/home/status.txt");
+                    URL url = new URL(domain+"status.txt");
 
                     // Read all the text returned by the server
                     BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
@@ -182,7 +186,7 @@ public class ControlActivity extends AppCompatActivity {
 
                 } else {
                     String sanitized = URLEncoder.encode(user.getName(), "UTF-8");
-                    URL url = new URL("http://psr6237.student.rit.edu/home/" + params[0] + "?name=" + sanitized);
+                    URL url = new URL(domain + params[0] + "?name=" + sanitized);
                     HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
                     connection.connect();

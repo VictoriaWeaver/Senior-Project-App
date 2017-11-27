@@ -20,6 +20,7 @@ public class GuestAccountsActivity extends AppCompatActivity {
     private RecyclerView userRecyclerView;
     private RecyclerView.Adapter userAdapter;
     private RecyclerView.LayoutManager userLayoutManager;
+    private String email;
 
 
     @Override
@@ -34,12 +35,24 @@ public class GuestAccountsActivity extends AppCompatActivity {
         addUser = (FloatingActionButton) findViewById(R.id.add_user_btn);
         addUser.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                startActivity(new Intent(GuestAccountsActivity.this, AddEditUserActivity.class));
+
+                Intent intent = new Intent(GuestAccountsActivity.this, AddEditUserActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("emailUser", email);
+                bundle.putBoolean("edit", false);
+                intent.putExtras(bundle);
+                startActivity(intent);
+
             }
         });
 
         userRecyclerView = (RecyclerView) findViewById(R.id.guest_accounts_list);
         displayUsers(userRecyclerView);
+
+        Bundle extras = getIntent().getExtras();
+        if(extras!=null) {
+            email = extras.getString("emailUser");
+        }
     }
 
 

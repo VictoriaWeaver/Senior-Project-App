@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
@@ -73,6 +74,8 @@ public class AddEditUserActivity extends AppCompatActivity {
     private Switch familySwitch;
     private Switch adminSwitch;
     private Bitmap bitmap;
+    private String domain;
+    private String user;
 
     boolean userIsAdmin = true;
     boolean edit;
@@ -110,10 +113,9 @@ public class AddEditUserActivity extends AppCompatActivity {
         }
 
         Bundle extras = getIntent().getExtras();
-        if (extras == null) {
-            edit = false;
-        } else {
-            edit = true;
+        if (extras != null) {
+            edit = extras.getBoolean("edit");
+            user = extras.getString("emailUser");
             String email = extras.getString("email");
             if (email != null) {
                 edit_email = email;
@@ -128,6 +130,9 @@ public class AddEditUserActivity extends AppCompatActivity {
                 familySwitch.setChecked(u.isFamily());
             }
         }
+
+        Resources res = getResources();
+        domain = res.getString(R.string.domain);
 
         setListeners();
 
@@ -285,7 +290,12 @@ public class AddEditUserActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
 
-                    startActivity(new Intent(AddEditUserActivity.this, MainActivity.class));
+                    Intent intent = new Intent(AddEditUserActivity.this, MainActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("emailUser", user);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+
                 } else if (status == 1) {
                     Context context = getApplicationContext();
                     CharSequence text = "Please complete all fields";
@@ -381,7 +391,7 @@ public class AddEditUserActivity extends AppCompatActivity {
         protected String doInBackground(String... params) {
             if (params[0].contains("name=")) {
                 try {
-                    URL url = new URL("http://psr6237.student.rit.edu/home/addUser/?" + params[0]);
+                    URL url = new URL(domain + "addUser.php/?" + params[0]);
                     HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
 
@@ -398,7 +408,7 @@ public class AddEditUserActivity extends AppCompatActivity {
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                     byte[] imageInByte = baos.toByteArray();
 
-                    URL url = new URL("http://psr6237.student.rit.edu/home/addUser/" + params[0]);
+                    URL url = new URL(domain + "UserImages/" + params[0]);
                     HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
                     connection.connect();

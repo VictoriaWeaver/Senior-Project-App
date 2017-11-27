@@ -39,7 +39,12 @@ public class FamilyAccountsActivity extends AppCompatActivity {
         addUser = (FloatingActionButton) findViewById(R.id.add_user_btn);
         addUser.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                startActivity(new Intent(FamilyAccountsActivity.this, AddEditUserActivity.class));
+                Intent intent = new Intent(FamilyAccountsActivity.this, AddEditUserActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("emailUser", email);
+                bundle.putBoolean("edit", false);
+                intent.putExtras(bundle);
+                startActivity(intent);
             }
         });
 
@@ -48,7 +53,7 @@ public class FamilyAccountsActivity extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
         if(extras!=null) {
-            email = extras.getString("email");
+            email = extras.getString("emailUser");
         }
 
     }

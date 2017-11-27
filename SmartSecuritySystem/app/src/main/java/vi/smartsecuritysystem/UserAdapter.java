@@ -1,7 +1,10 @@
 package vi.smartsecuritysystem;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Application;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -17,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +41,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.CustomViewHold
     @Override
     public CustomViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.user_row_layout, null);
-        CustomViewHolder viewHolder = new CustomViewHolder(view);
+        CustomViewHolder viewHolder = new CustomViewHolder(view, mContext);
         return viewHolder;
     }
 
@@ -72,8 +76,9 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.CustomViewHold
         protected TextView emailView;
         protected Button editBtn;
         protected Button deleteBtn;
+        protected String userEmail;
 
-        public CustomViewHolder(View view) {
+        public CustomViewHolder(View view, final Context context) {
             super(view);
             this.imageView = (ImageView) view.findViewById(R.id.thumbnail);
             this.textView = (TextView) view.findViewById(R.id.title);
@@ -81,13 +86,19 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.CustomViewHold
             this.editBtn = (Button) view.findViewById(R.id.edit_user);
             this.emailView = (TextView) view.findViewById(R.id.email);
 
+            Intent intent = ((Activity) context).getIntent();
+            this.userEmail = intent.getStringExtra("emailUser");
+
+
             this.editBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     String uEmail = emailView.getText().toString();
                     Intent i = new Intent(v.getContext(), AddEditUserActivity.class);
                     Bundle b = new Bundle();
+                    b.putString("emailUser", userEmail);
                     b.putString("email",uEmail);
+                    b.putBoolean("edit", true);
                     i.putExtras(b);
                     v.getContext().startActivity(i);
                 }
@@ -99,7 +110,9 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.CustomViewHold
                     String uEmail = emailView.getText().toString();
                     Intent i = new Intent(v.getContext(), MainActivity.class);
                     Bundle b = new Bundle();
-                    b.putString("email",uEmail);
+                    b.putString("emailUser", userEmail);
+                    b.putBoolean("delete", true);
+                    b.putString("emailDel",uEmail);
                     i.putExtras(b);
                     v.getContext().startActivity(i);
                 }
