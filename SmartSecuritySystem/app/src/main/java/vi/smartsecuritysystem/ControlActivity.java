@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.util.Date;
 
@@ -30,7 +31,7 @@ public class ControlActivity extends AppCompatActivity {
     private TextView statusView;
     private String piStatus;
     private String logAction = "";
-    private String fileName = "history.txt";
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +44,15 @@ public class ControlActivity extends AppCompatActivity {
         unlockBtn = (Button) findViewById(R.id.remote_unlock_btn);
         lockBtn = (Button) findViewById(R.id.remote_lock_btn);
         statusView = (TextView) findViewById(R.id.status);
+
+        Bundle extras = getIntent().getExtras();
+        if(extras!=null) {
+            String email = extras.getString("email");
+            if(email != null){
+                DBHelper dbHelp = new DBHelper(this);
+                user = dbHelp.getUser(email);
+            }
+        }
 
         getStatus();
 
@@ -138,7 +148,7 @@ public class ControlActivity extends AppCompatActivity {
 
     private boolean isFull() {
         try (BufferedReader input = new BufferedReader(new InputStreamReader(
-                openFileInput(fileName)));) {
+                openFileInput("history.txt")));) {
             String line;
             int count = 0;
             while ((line = input.readLine()) != null) {
@@ -171,7 +181,8 @@ public class ControlActivity extends AppCompatActivity {
 
 
                 } else {
-                    URL url = new URL("http://psr6237.student.rit.edu/home/" + params[0] + "?name=USER");
+                    String sanitized = URLEncoder.encode(user.getName(), "UTF-8");
+                    URL url = new URL("http://psr6237.student.rit.edu/home/" + params[0] + "?name=" + sanitized);
                     HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
                     connection.connect();
