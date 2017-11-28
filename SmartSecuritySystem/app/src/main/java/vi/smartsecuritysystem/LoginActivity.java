@@ -94,6 +94,31 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+
+
+        //check if empty
+        //if empty add admin user
+        DBHelper dbHelp = new DBHelper(this);
+        List<User> users = (ArrayList<User>) dbHelp.getAllUsers();
+        if (users.size() == 0){
+            int next_id = dbHelp.getID();
+            String name = "Admin";
+            String email = "admin@gmail.com";
+            String pass = "admin";
+            String saltedPassword = DBHelper.SALT + pass;
+            String hashedPassword = DBHelper.generateHash(saltedPassword);
+            byte[] image = {0};
+            User admin = new User();
+            admin.setFamily(true);
+            admin.setAdmin(true);
+            admin.setEmail(email);
+            admin.setName(name);
+            admin.setPassword(hashedPassword);
+            admin.setID(next_id);
+            admin.setImage(image);
+            dbHelp.addUser(admin);
+        }
+
     }
 
     private void populateAutoComplete() {

@@ -24,7 +24,7 @@ import java.security.NoSuchAlgorithmException;
 
 public class DBHelper extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 5;
 
     private static final String DATABASE_NAME = "usersManager.db";
     private static final String TABLE_USERS = "users";
