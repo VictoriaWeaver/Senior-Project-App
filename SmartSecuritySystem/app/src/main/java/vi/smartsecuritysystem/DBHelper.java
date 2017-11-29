@@ -24,7 +24,7 @@ import java.security.NoSuchAlgorithmException;
 
 public class DBHelper extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 5;
+    private static final int DATABASE_VERSION = 6;
 
     private static final String DATABASE_NAME = "usersManager.db";
     private static final String TABLE_USERS = "users";
@@ -50,7 +50,7 @@ public class DBHelper extends SQLiteOpenHelper {
         String CREATE_USERS_TABLE = "CREATE TABLE " + TABLE_USERS + " ("
                 + KEY_ID + " INTEGER PRIMARY KEY," + KEY_NAME + " TEXT,"
                 + KEY_ADMIN + " INTEGER," + KEY_FAMILY + " INTEGER," + KEY_EMAIL
-                + " TEXT UNIQUE," + KEY_PASSWORD + " TEXT," + KEY_IMAGE + " BLOB)";
+                + " TEXT UNIQUE," + KEY_PASSWORD + " TEXT," + KEY_IMAGE + " TEXT)";
         db.execSQL(CREATE_USERS_TABLE);
 
     }
@@ -105,7 +105,7 @@ public class DBHelper extends SQLiteOpenHelper {
         boolean family = (cursor.getInt(3) != 0);
 
         User user = new User(Integer.parseInt(cursor.getString(0)),
-                cursor.getString(1), admin, family, cursor.getString(4),cursor.getString(5),cursor.getBlob(6));
+                cursor.getString(1), admin, family, cursor.getString(4),cursor.getString(5),cursor.getString(6));
         // return user
         return user;
     }
@@ -122,7 +122,7 @@ public class DBHelper extends SQLiteOpenHelper {
         boolean family = (cursor.getInt(3) != 0);
 
         User user = new User(Integer.parseInt(cursor.getString(0)),
-                cursor.getString(1), admin, family, cursor.getString(4),cursor.getString(5),cursor.getBlob(6));
+                cursor.getString(1), admin, family, cursor.getString(4),cursor.getString(5),cursor.getString(6));
         // return user
         return user;
     }
@@ -146,7 +146,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 user.setFamily(Integer.parseInt(cursor.getString(3)) != 0);
                 user.setEmail(cursor.getString(4));
                 user.setPassword(cursor.getString(5));
-                user.setImage(cursor.getBlob(6));
+                user.setImage(cursor.getString(6));
                 // Adding contact to list
                 userList.add(user);
             } while (cursor.moveToNext());

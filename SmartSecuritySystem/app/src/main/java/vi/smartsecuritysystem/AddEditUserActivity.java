@@ -20,6 +20,7 @@ import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -123,8 +124,9 @@ public class AddEditUserActivity extends AppCompatActivity {
                 DBHelper dbHelp = new DBHelper(this);
                 User u = dbHelp.getUser(email);
                 emailEdit.setText(email);
-                byte[] b = u.getImage();
-                Bitmap bitmap = BitmapFactory.decodeByteArray(b, 0, b.length);
+                String userImage = u.getImage();
+                File imgFile = new File(userImage);
+                Bitmap bitmap = BitmapFactory.decodeFile(imgFile.getPath());
                 profileImage.setImageBitmap(bitmap);
                 nameEdit.setText(u.getName());
                 adminSwitch.setChecked(u.isAdmin());
@@ -264,33 +266,42 @@ public class AddEditUserActivity extends AppCompatActivity {
                     } else {
                         next_id = dbHelp.getUser(edit_email).getID();
                     }
+
+
                     bitmap = ((BitmapDrawable) profileImage.getDrawable()).getBitmap();
-                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                    byte[] imageInByte = baos.toByteArray();
+                    File cachePath = new File(imgDecodableString);
+                    try {
+                        cachePath.createNewFile();
+                        FileOutputStream ostream = new FileOutputStream(cachePath);
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, ostream);
+                        ostream.close();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
 
                     User u = new User(next_id, nameEdit.getText().toString(), !familySwitch.getShowText(), adminSwitch.getShowText(),
-                            emailEdit.getText().toString(), hashedPassword, imageInByte);
+                            emailEdit.getText().toString(), hashedPassword, imgDecodableString);
                     if (!edit) {
                         dbHelp.addUser(u);
                     } else {
                         dbHelp.updateUser(u);
                     }
 
-                    try {
-
-                        String sanitized = nameEdit.getText().toString().replaceAll(" ", "_");
-                        AddEditUserActivity.Background_get asyncTask = new AddEditUserActivity.Background_get();
-                        String x = asyncTask.execute("name=" + sanitized).get();
-
-                        //transfer imageInByte to rpi3
-                        bitmap = ((BitmapDrawable) profileImage.getDrawable()).getBitmap();
-                        asyncTask = new AddEditUserActivity.Background_get();
-                        x = asyncTask.execute(sanitized).get();
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+//                    try {
+//
+//                        String sanitized = nameEdit.getText().toString().replaceAll(" ", "_");
+//                        AddEditUserActivity.Background_get asyncTask = new AddEditUserActivity.Background_get();
+//                        String x = asyncTask.execute("name=" + sanitized).get();
+//
+//                        //transfer imageInByte to rpi3
+//                        bitmap = ((BitmapDrawable) profileImage.getDrawable()).getBitmap();
+//                        asyncTask = new AddEditUserActivity.Background_get();
+//                        x = asyncTask.execute(sanitized).get();
+//
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
 
                     Intent intent = new Intent(AddEditUserActivity.this, MainActivity.class);
                     Bundle bundle = new Bundle();

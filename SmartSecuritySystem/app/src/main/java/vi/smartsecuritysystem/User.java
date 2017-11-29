@@ -14,7 +14,7 @@ public class User {
     private boolean _family;
     private String _email;
     private String _password;
-    private byte[] _image;
+    private String _image;
 
     public User(){
         this._id = 0;
@@ -25,7 +25,7 @@ public class User {
         this._password = "null";
     }
 
-    public User(int id, String name, boolean family, boolean admin, String email, String password, byte[] image) {
+    public User(int id, String name, boolean family, boolean admin, String email, String password, String image) {
         this._id = id;
         this._name = name;
         this._admin = admin;
@@ -52,7 +52,7 @@ public class User {
         return this._name;
     }
 
-    public byte[] getImage() { return this._image; }
+    public String getImage() { return this._image; }
 
     public boolean isAdmin(){
         return this._admin;
@@ -90,6 +90,6 @@ public class User {
         this._password = password;
     }
 
-    public void setImage(byte[] b){ this._image = b; }
+    public void setImage(String b){ this._image = b; }
 
 }

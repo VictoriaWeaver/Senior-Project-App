@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,15 +50,13 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.CustomViewHold
     public void onBindViewHolder(CustomViewHolder customViewHolder, int i) {
         String userName = userList.get(i).getName();
         String userEmail = userList.get(i).getEmail();
-        byte[] b = userList.get(i).getImage();
-        Bitmap bitmap = BitmapFactory.decodeByteArray(b , 0, b.length);
-        //Render image using Picasso library
-//        if (!TextUtils.isEmpty(feedItem.getThumbnail())) {
-//            Picasso.with(mContext).load(feedItem.getThumbnail())
-//                    .error(R.drawable.placeholder)
-//                    .placeholder(R.drawable.placeholder)
-//                    .into(customViewHolder.imageView);
-//        }
+        String userImage = userList.get(i).getImage();
+
+        File imgFile = new File(userImage);
+
+        String path = imgFile.getAbsolutePath();
+
+        Bitmap bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
 
         //Setting text view title
         customViewHolder.emailView.setText(userEmail);

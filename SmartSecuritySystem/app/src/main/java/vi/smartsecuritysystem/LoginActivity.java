@@ -5,6 +5,8 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -30,6 +32,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -107,7 +111,21 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             String pass = "admin";
             String saltedPassword = DBHelper.SALT + pass;
             String hashedPassword = DBHelper.generateHash(saltedPassword);
+
+
+
             byte[] image = {0};
+            Bitmap b = BitmapFactory.decodeByteArray(image, 0, image.length);
+            File cachePath = new File("admin.jpg");
+            try {
+                cachePath.createNewFile();
+                FileOutputStream ostream = new FileOutputStream(cachePath);
+                b.compress(Bitmap.CompressFormat.JPEG, 100, ostream);
+                ostream.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
             User admin = new User();
             admin.setFamily(true);
             admin.setAdmin(true);
@@ -115,7 +133,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             admin.setName(name);
             admin.setPassword(hashedPassword);
             admin.setID(next_id);
-            admin.setImage(image);
+            admin.setImage("admin.jpg");
             dbHelp.addUser(admin);
         }
 
