@@ -119,7 +119,7 @@ public class AddEditUserActivity extends AppCompatActivity {
             edit = extras.getBoolean("edit");
             user = extras.getString("emailUser");
             String email = extras.getString("email");
-            if (email != null) {
+            if (edit) {
                 edit_email = email;
                 DBHelper dbHelp = new DBHelper(this);
                 User u = dbHelp.getUser(email);
@@ -128,6 +128,7 @@ public class AddEditUserActivity extends AppCompatActivity {
                 File imgFile = new File(userImage);
                 Bitmap bitmap = BitmapFactory.decodeFile(imgFile.getPath());
                 profileImage.setImageBitmap(bitmap);
+                imgDecodableString = u.getImage();
                 nameEdit.setText(u.getName());
                 adminSwitch.setChecked(u.isAdmin());
                 familySwitch.setChecked(u.isFamily());
